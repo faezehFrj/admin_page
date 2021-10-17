@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>adminpage.png</file>
+		<file>exportButton.svg</file>
+		<file>fingerprint.png</file>
+		<file>bx_bx-user.svg</file>
+		<file>icon.svg</file>
+		<file>icon_dashboard.svg</file>
+		<file>icon_dashboard.png</file>
+		<file>icon_select_user.svg</file>
+		<file>bi_plus-circle.png</file>
+		<file>adminpage_employee.png</file>
+		<file>switch_able.png</file>
+		<file>switch_disable.png</file>
+		<file>rsz_arash_golsaz.png</file>
+		<file>back.png</file>
+		<file>finger_max.png</file>
+    </qresource>
+</RCC>
