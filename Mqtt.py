@@ -25,6 +25,7 @@ window.showNowTime()
 window.show_employee()
 
 
+
 def on_connect(self, userdata, flags, rc):
     if rc == 0:
 
@@ -436,6 +437,10 @@ def go_to_admin_page():
 def create_new_employee():
     global status_crete_employee
     windowadmin.ui_admin.frame_features_one_employee.show()
+
+    windowadmin.ui_admin.lineEdit_fname.setText(QCoreApplication.translate("MainWindow", "", None))
+    windowadmin.ui_admin.lineEdit_Lname.setText(QCoreApplication.translate("MainWindow", "", None))
+    windowadmin.ui_admin.label_RFID.setText(QCoreApplication.translate("MainWindow","", None))
     status_crete_employee = 1
 
 
@@ -448,9 +453,17 @@ def save_or_edit_employee():
         if lastName =="" or firstName=="" or id_rfid_employee== "":
             windowadmin.ui_admin.label_erro_fill.setText("no fild can not empty")
         else:
-            windowadmin.ui_admin.label_erro_fill.setText("")
-            db.maincreatedata(id_rfid_employee,firstName,lastName,"","",1)
 
+            windowadmin.ui_admin.label_erro_fill.setText("")
+            number1=db.select_number_fingerprint_id()
+            number2=number1+1
+            db.maincreatedata(id_rfid_employee,firstName,lastName,str(number1),str(number2),1)
+            db.update_fingerprint_id(number2+1)
+
+            #update list
+
+            windowadmin.show_button_employee()
+            windowadmin.update_list_employee()
 
 
     else:

@@ -3,7 +3,6 @@ from sqlite3 import Error
 from datetime import datetime
 
 
-
 def create_connection(db_file):
     """ create a database connection to the SQLite database
         specified by db_file
@@ -94,7 +93,8 @@ def select_task_by_priority(conn, idCard):
     rows = cur.fetchall()
     return rows
 
-#*****select employee by fingerprint id ******
+
+# *****select employee by fingerprint id ******
 
 def select_employee_by_fingerprint(idFingerprint):
     try:
@@ -103,13 +103,14 @@ def select_employee_by_fingerprint(idFingerprint):
         print("Connected to SQLite")
 
         sql_select_query = """SELECT * FROM employeeTable WHERE  finger1= ? OR finger2= ?"""
-        cursor.execute(sql_select_query, (idFingerprint,idFingerprint,))
+        cursor.execute(sql_select_query, (idFingerprint, idFingerprint,))
         records = cursor.fetchall()
         print("Printing ID ", idFingerprint)
         return records
 
     except sqlite3.Error as error:
         print("Failed to read data from sqlite table", error)
+
 
 # *******delete task ********
 def delete_task(conn, userID):
@@ -127,16 +128,15 @@ def delete_task(conn, userID):
 
 # *******update********
 
-def updateLogTable(timeOutput,idCard):
-
+def updateLogTable(timeOutput, idCard):
     try:
         sqliteConnection = sqlite3.connect('D:\V2.0.0\Programme\qt\DB\ArtaDoor.db')
         cursor = sqliteConnection.cursor()
         print("Connected to SQLite")
         sql_update_query = """Update logTable set timeOutput = ?  WHERE  idCard = ?   and (id=(SELECT MAX(id) FROM logTable))"""
-        data = (timeOutput,idCard)
+        data = (timeOutput, idCard)
         cursor.execute(sql_update_query, data)
-        #cursor.execute(sql_update_query)
+        # cursor.execute(sql_update_query)
         sqliteConnection.commit()
         print("Record Updated successfully ")
         cursor.close()
@@ -147,6 +147,7 @@ def updateLogTable(timeOutput,idCard):
     #     if sqliteConnection:
     #         sqliteConnection.close()
     #         print("The SQLite connection is closed")
+
 
 # *******create table in db*******
 
@@ -173,6 +174,10 @@ def mainCreateTable():
                                     FOREIGN KEY(idCard) REFERENCES employee(idCard) 
                                 );"""
 
+    sql_create_save_end_fingerprint = """CREATE TABLE IF NOT EXISTS fingerprintID (
+                                    finalFingerprintID integer 
+                                );"""
+
     # create a database connection
     conn = create_connection(database)
 
@@ -183,6 +188,9 @@ def mainCreateTable():
 
         # create tasks table
         create_table(conn, sql_create_tasks_table)
+
+        # create fingerprint
+        create_table(conn, sql_create_save_end_fingerprint)
     else:
         print("Error! cannot create the database connection.")
 
@@ -190,7 +198,7 @@ def mainCreateTable():
 # ******main create data in table ********
 
 
-def maincreatedata(RFIDcode,FirstName,LastName,finger1,finger2,Status):
+def maincreatedata(RFIDcode, FirstName, LastName, finger1, finger2, Status):
     database = r"D:\V2.0.0\Programme\qt\DB\ArtaDoor.db"
 
     # create a database connection
@@ -198,7 +206,7 @@ def maincreatedata(RFIDcode,FirstName,LastName,finger1,finger2,Status):
     with conn:
         try:
             # create a new project'
-            employee = (RFIDcode, FirstName, LastName,finger1,finger2,0,Status)
+            employee = (RFIDcode, FirstName, LastName, finger1, finger2, 0, Status)
             # employee = ('C6BFFDAEl', 'arashh', 'golsaz', '1')
             employee_id = create_employee(conn, employee)
             return 'successfull'
@@ -215,7 +223,7 @@ def maincreatedata(RFIDcode,FirstName,LastName,finger1,finger2,Status):
             print('some thing is wrong')
 
 
-def mainCreateLog(date,timeEnter,timeOut,employee_id):
+def mainCreateLog(date, timeEnter, timeOut, employee_id):
     database = r"D:\V2.0.0\Programme\qt\DB\ArtaDoor.db"
 
     # create a database connection
@@ -230,6 +238,31 @@ def mainCreateLog(date,timeEnter,timeOut,employee_id):
         except:
             print('some thing is wrong')
 
+
+def mainCreatefingerprintID():
+    try:
+        sqliteConnection = sqlite3.connect('D:\V2.0.0\Programme\qt\DB\ArtaDoor.db')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+
+        sqlite_insert_query = """INSERT INTO fingerprintID
+                                  (finalFingerprintID) 
+                                   VALUES 
+                                  (1)"""
+
+        count = cursor.execute(sqlite_insert_query)
+        sqliteConnection.commit()
+        print("Record inserted successfully into SqliteDb_developers table ", cursor.rowcount)
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to insert data into sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+
 # *******main select data from table **************
 def mainSelectData():
     database = r"D:\V2.0.0\Programme\qt\DB\ArtaDoor.db"
@@ -243,6 +276,7 @@ def mainSelectData():
         print("2. Query all tasks")
         select_all_employee(conn)
 
+
 def searchIdCard(idCard):
     database = r"D:\V2.0.0\Programme\qt\DB\ArtaDoor.db"
 
@@ -251,6 +285,7 @@ def searchIdCard(idCard):
     with conn:
         print("1. Query task by priority:")
         return select_task_by_priority(conn, idCard)
+
 
 def searchIdFingerprint(idFingerprint):
     database = r"D:\V2.0.0\Programme\qt\DB\ArtaDoor.db"
@@ -268,7 +303,6 @@ def main_select_all_employee():
     # create a database connection
     conn = create_connection(database)
     with conn:
-
         print("2. Query all tasks")
         return select_all_employee(conn)
 
@@ -288,12 +322,13 @@ def selectEmployeeAndTimeIN(userID):
     cursor = sqliteConnection.cursor()
     sqlite_select_query = """SELECT timeInput,timeOutput from employeeTable INNER JOIN logTable 
     ON employeeTable.idCard=logTable.idCard where userID =? and (id=(SELECT MAX(id) FROM logTable))"""
-    cursor.execute(sqlite_select_query,(userID,))
+    cursor.execute(sqlite_select_query, (userID,))
     records = cursor.fetchall()
     print("Total rows are:  ", len(records))
     for row in records:
         print(row)
     cursor.close()
+
 
 def getAllEmployeeAndTime():
     sqliteConnection = sqlite3.connect('D:\V2.0.0\Programme\qt\DB\ArtaDoor.db')
@@ -304,9 +339,47 @@ def getAllEmployeeAndTime():
     return records
 
 
+def update_fingerprint_id(number):
+    try:
+        sqliteConnection = sqlite3.connect('D:\V2.0.0\Programme\qt\DB\ArtaDoor.db')
+        cursor = sqliteConnection.cursor()
+        print("Connected to SQLite")
+
+        sql_select_query = """Update fingerprintID set finalFingerprintID = ?"""
+        cursor.execute(sql_select_query, (number,))
+        sqliteConnection.commit()
+        print("Record Updated successfully ")
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to read data from sqlite table", error)
+
+def select_number_fingerprint_id():
+    try:
+        sqliteConnection = sqlite3.connect('D:\V2.0.0\Programme\qt\DB\ArtaDoor.db')
+        cursor = sqliteConnection.cursor()
+        print("Connected to SQLite")
+
+        sqlite_select_query = """SELECT * from fingerprintID"""
+        cursor.execute(sqlite_select_query)
+        records = cursor.fetchall()
+        cursor.close()
+        return records[0][0]
+
+    except sqlite3.Error as error:
+        print("Failed to read data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+
 if __name__ == '__main__':
-   # maincreatedata("39402094","farnaz","farajzadeha","5","6","1")
-   # print(select_employee_by_fingerprint(3))
-   #getAllEmployeeAndTime()
-   #main_select_all_employee()
-   mainCreateTable()
+    # maincreatedata("39402094","farnaz","farajzadeha","5","6","1")
+    # print(select_employee_by_fingerprint(3))
+    # getAllEmployeeAndTime()
+    # main_select_all_employee()
+    #mainCreateTable()
+    #  mainCreatefingerprintID()
+    print(select_number_fingerprint_id())
+   # update_fingerprint_id(4)

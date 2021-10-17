@@ -55,12 +55,16 @@ class MainWindowAdmin(QMainWindow):
         self.ui_admin.lineEdit_fname.setText(QCoreApplication.translate("MainWindow",name , None))
         self.ui_admin.lineEdit_Lname.setText(QCoreApplication.translate("MainWindow", family, None))
         self.ui_admin.label_RFID.setText(QCoreApplication.translate("MainWindow", rfid, None))
+        self.ui_admin.label_t_name.setText(name)
+        self.ui_admin.label_2.setText("Features")
 
         #show alarm bellow finger print
         if self.epmloyees[id_employee_choose][6]=="0":
             self.ui_admin.label_message_number_fingerprint.setText("add your frist fingerprint")
+            self.ui_admin.label_id_fingerprint.setText(self.epmloyees[id_employee_choose][4])
         elif self.epmloyees[id_employee_choose][6]=="1":
             self.ui_admin.label_message_number_fingerprint.setText("one fingerprint has saved")
+            self.ui_admin.label_id_fingerprint.setText(self.epmloyees[id_employee_choose][5])
         else:
             self.ui_admin.label_message_number_fingerprint.setText("fingerprint has saved")
         self.set_id(self.epmloyees[id_employee_choose][0])
@@ -92,6 +96,8 @@ class MainWindowAdmin(QMainWindow):
     def get_id(self):
         return self.id_employee_select
 
+    def update_list_employee(self):
+        self.epmloyees = db.main_select_all_employee()
 # YOUR APPLICATION
 class MainWindow(QMainWindow):
     def __init__(self):
