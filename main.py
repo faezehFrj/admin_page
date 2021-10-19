@@ -13,6 +13,7 @@ from employee import Person
 import DataBase as db
 import pickle
 from ui_adminPage import Ui_MainWindowAdmin
+from uiAlarmSave import Ui_MainWindow_alarm_save
 # import Mqtt
 
 #----------------admin____________________________
@@ -198,14 +199,16 @@ class MainWindow(QMainWindow):
         return self.array_employee
 
     def test(self):
+
         array = self.get_list_employee()
         for rows in range(len(array)):
+
             if 1 == array[rows][0]:
                 person = array[rows][1]
                 person.label_tim_login.setStyleSheet(u"color: rgb(255, 255, 12);\n"
                                                "font: 25 10pt \"Segoe UI Light\";")
                 break
-        print(person)
+
 
     def change_color_form_employee(self):
 
@@ -262,18 +265,21 @@ class MainWindow(QMainWindow):
 class AlarmSaveEmployee(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
-        self.ui_admin = Ui_MainWindowAdmin()
-        self.ui_admin.setupUi(self)
+        self.ui_alarm_save = Ui_MainWindow_alarm_save()
+        self.ui_alarm_save.setupUi(self)
+        self.setWindowFlag(Qt.FramelessWindowHint)
 
 
 
-if __name__ == "__main__":
-   # Mqtt.configmqtt()
-    app = QApplication(sys.argv)
-    # window = MainWindow()
-    # window.showNowTime()
-    # window.show()
-    window=MainWindowAdmin()
-    window.show_button_employee()
-    window.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#    # Mqtt.configmqtt()
+#     app = QApplication(sys.argv)
+#     # window = MainWindow()
+#     # window.showNowTime()
+#     # window.show_employee()
+#     # window.test()
+#
+#     window=MainWindowAdmin()
+#     window.show_button_employee()
+#     window.show()
+#     sys.exit(app.exec_())

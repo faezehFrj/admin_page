@@ -324,9 +324,9 @@ def selectEmployeeAndTimeIN(userID):
     ON employeeTable.idCard=logTable.idCard where userID =? and (id=(SELECT MAX(id) FROM logTable))"""
     cursor.execute(sqlite_select_query, (userID,))
     records = cursor.fetchall()
-    print("Total rows are:  ", len(records))
-    for row in records:
-        print(row)
+    # print("Total rows are:  ", len(records))
+    # for row in records:
+    #     print(row)
     cursor.close()
 
 
@@ -399,6 +399,6 @@ def update_employee_select(Fname,Lname,rfidCode,idEmployee):
     # getAllEmployeeAndTime()
     # main_select_all_employee()
     #mainCreateTable()
-    # mainCreatefingerprintID()
+    #mainCreatefingerprintID()
     #print(select_number_fingerprint_id())
     # update_fingerprint_id(4)

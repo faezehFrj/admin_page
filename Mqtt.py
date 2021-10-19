@@ -16,14 +16,14 @@ myGlobalMessagePayload = ''  # HERE!
 state_rfid = 0  # baraye in ke bebinim mikhad fard jadid  tarif kone ya in ke mikhad haminjor biyad to
 id_rfid_employee = 0
 buttonClicked = 0
-status_crete_employee=0
+status_crete_employee = 0
 statusLamp = [0, 0, 0, 0, 0, 0, 0, 0]
 app = ui.QApplication(ui.sys.argv)
 window = ui.MainWindow()
 windowadmin = ui.MainWindowAdmin()
+windowAlarmEmployee = ui.AlarmSaveEmployee()
 window.showNowTime()
 window.show_employee()
-
 
 
 def on_connect(self, userdata, flags, rc):
@@ -97,7 +97,7 @@ def subscribe_all_topic(topic_subscrib, mesege):
         else:
             detrmineStatusButton(resultDB)
 
-        #if status_crete_employee == 1:
+        # if status_crete_employee == 1:
         windowadmin.ui_admin.label_RFID.setText(id_rfid_employee)
 
 
@@ -230,14 +230,15 @@ def detrmineStatusButton(resultDB):
         db.mainCreateLog(today, current_time, '', resultDB[0][1])
         array = window.get_list_employee()
         for rows in range(len(array)):
-            if resultDB[0][1] == array[rows][0]:
+            if resultDB[0][0] == array[rows][0]:
                 person = array[rows][1]
-                break
-        person.label_tim_login.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-                                             "font: 25 10pt \"Segoe UI Light\";")
-        person.label_name_employee.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-                                                 "font: 25 10pt \"Segoe UI Light\";")
-        person.label_tim_login.setText(window.ui.QCoreApplication.translate("MainWindow", current_time, None))
+                # break
+                person.label_tim_login.setStyleSheet(u"color: rgb(255, 255, 255);\n"
+                                                     "font: 25 10pt \"Segoe UI Light\";")
+                person.label_name_employee.setStyleSheet(u"color: rgb(255, 255, 255);\n"
+                                                         "font: 25 10pt \"Segoe UI Light\";")
+                person.label_tim_login.setText(current_time)
+                print("click")
         ####set ui log in and log out
         # window.ui.
 
@@ -262,16 +263,16 @@ def detrmineStatusButton(resultDB):
 
         array = window.get_list_employee()
         for rows in range(len(array)):
-            if resultDB[0][1] == array[rows][0]:
+            if resultDB[0][0] == array[rows][0]:
                 person = array[rows][1]
-                break
-        person.label_time_logOut.setStyleSheet(u"color: rgb(121, 121, 121);\n"
-                                               "font: 25 10pt \"Segoe UI Light\";")
-        person.label_tim_login.setStyleSheet(u"color: rgb(121, 121, 121);\n"
-                                             "font: 25 10pt \"Segoe UI Light\";")
-        person.label_name_employee.setStyleSheet(u"color: rgb(121, 121, 121);\n"
-                                                 "font: 25 10pt \"Segoe UI Light\";")
-        person.label_time_logOut.setText(window.ui.QCoreApplication.translate("MainWindow", current_time, None))
+                # break
+                person.label_time_logOut.setStyleSheet(u"color: rgb(121, 121, 121);\n"
+                                                       "font: 25 10pt \"Segoe UI Light\";")
+                person.label_tim_login.setStyleSheet(u"color: rgb(121, 121, 121);\n"
+                                                     "font: 25 10pt \"Segoe UI Light\";")
+                person.label_name_employee.setStyleSheet(u"color: rgb(121, 121, 121);\n"
+                                                         "font: 25 10pt \"Segoe UI Light\";")
+                person.label_time_logOut.setText(current_time)
 
 
 # ------------------normal status----------------#
@@ -344,10 +345,18 @@ def function_button():
     windowadmin.ui_admin.button_add_first.clicked.connect(create_new_employee)
     windowadmin.ui_admin.pushButton_save.clicked.connect(save_or_edit_employee)
     windowadmin.ui_admin.pushButton_Adashboard.clicked.connect(back_dashboard)
+    windowAlarmEmployee.ui_alarm_save.pushButton_alarm_save.clicked.connect(close_save_window)
+
+
+def close_save_window():
+    windowAlarmEmployee.hide()
+
 
 def back_dashboard():
     windowadmin.hide()
     window.show()
+
+
 def the_button_was_clicked1():
     if statusLamp[0] == 0:
         publish(client, "", "light1/on")
@@ -440,17 +449,17 @@ def go_to_admin_page():
 
 
 def create_new_employee():
-    number=windowadmin.get_number_employee
+    number = windowadmin.get_number_employee()
 
     global status_crete_employee
-    if number != 8:
+    if number <8:
         windowadmin.ui_admin.frame_features_one_employee.show()
         windowadmin.ui_admin.fram_after_add.hide()
 
         windowadmin.ui_admin.lineEdit_fname.setText(QCoreApplication.translate("MainWindow", "", None))
         windowadmin.ui_admin.lineEdit_Lname.setText(QCoreApplication.translate("MainWindow", "", None))
-        windowadmin.ui_admin.label_RFID.setText(QCoreApplication.translate("MainWindow","", None))
-        id_fingerpriint=db.select_number_fingerprint_id()
+        windowadmin.ui_admin.label_RFID.setText(QCoreApplication.translate("MainWindow", "", None))
+        id_fingerpriint = db.select_number_fingerprint_id()
         windowadmin.ui_admin.label_id_fingerprint.setText(str(id_fingerpriint))
 
         status_crete_employee = 1
@@ -460,28 +469,34 @@ def create_new_employee():
 
 
 def save_or_edit_employee():
-    lenth=len(windowadmin.get_epmloyees())
-    if status_crete_employee==1 and lenth !=7:
+    lenth = len(windowadmin.get_epmloyees())
+    if status_crete_employee == 1:
         firstName = windowadmin.ui_admin.lineEdit_fname.text()
         lastName = windowadmin.ui_admin.lineEdit_Lname.text()
 
-
-        if lastName =="" or firstName=="" or id_rfid_employee== "":
+        if lastName == "" or firstName == "" or id_rfid_employee == "":
             windowadmin.ui_admin.label_erro_fill.setText("no fild can not empty")
         else:
 
             windowadmin.ui_admin.label_erro_fill.setText("")
-            number1=db.select_number_fingerprint_id()
+            number1 = db.select_number_fingerprint_id()
             number2 = number1 + 1
-            result=db.maincreatedata(id_rfid_employee,firstName,lastName,str(number1),str(number2),1)
-            if result==True:
-                db.update_fingerprint_id(number2+1)
+            result = db.maincreatedata(id_rfid_employee, firstName, lastName, str(number1), str(number2), 1)
 
-            #update list
+            if result == True:
+                db.update_fingerprint_id(number2 + 1)
+                windowAlarmEmployee.show()
+                windowAlarmEmployee.ui_alarm_save.labelAlaemEployeeSave.setText("Employee saved")
+                # update list
 
-            windowadmin.show_button_employee()
-            windowadmin.update_list_employee()
-            status_crete_employee == 0
+                windowadmin.show_button_employee()
+                windowadmin.update_list_employee()
+                status_crete_employee == 0
+
+            elif result== False:
+                windowAlarmEmployee.show()
+                windowAlarmEmployee.ui_alarm_save.labelAlaemEployeeSave.setText("UNIQUE idCard failed")
+
 
     else:
         # setIDrfid(windowadmin.get_rfid_select_employee())
@@ -490,13 +505,7 @@ def save_or_edit_employee():
         # id_employee=windowadmin.get_id()
         pass
 
-
-
-       # db.update_employee_select(firstName,lastName,,id_employee)
-
-
-
-
+    # db.update_employee_select(firstName,lastName,,id_employee)
 
 
 ##--------------------------------------

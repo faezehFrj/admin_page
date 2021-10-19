@@ -37,7 +37,7 @@ font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
      <string>Employee saved</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="pushButton_alarm_save">
     <property name="geometry">
      <rect>
       <x>150</x>
