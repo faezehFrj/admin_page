@@ -97,8 +97,8 @@ def subscribe_all_topic(topic_subscrib, mesege):
         else:
             detrmineStatusButton(resultDB)
 
-        if status_crete_employee == 1:
-            windowadmin.ui_admin.label_RFID.setText(id_rfid_employee)
+        #if status_crete_employee == 1:
+        windowadmin.ui_admin.label_RFID.setText(id_rfid_employee)
 
 
 
@@ -341,9 +341,13 @@ def function_button():
     window.ui.button_power.clicked.connect(access_all_button)
     window.ui.pushButton_setting.clicked.connect(go_to_admin_page)
     windowadmin.ui_admin.pushButton_5.clicked.connect(create_new_employee)
+    windowadmin.ui_admin.button_add_first.clicked.connect(create_new_employee)
     windowadmin.ui_admin.pushButton_save.clicked.connect(save_or_edit_employee)
+    windowadmin.ui_admin.pushButton_Adashboard.clicked.connect(back_dashboard)
 
-
+def back_dashboard():
+    windowadmin.hide()
+    window.show()
 def the_button_was_clicked1():
     if statusLamp[0] == 0:
         publish(client, "", "light1/on")
@@ -431,21 +435,33 @@ def the_button_was_clicked7():
 # -----admin page display-------#
 
 def go_to_admin_page():
+    window.hide()
     windowadmin.show()
 
 
 def create_new_employee():
-    global status_crete_employee
-    windowadmin.ui_admin.frame_features_one_employee.show()
+    number=windowadmin.get_number_employee
 
-    windowadmin.ui_admin.lineEdit_fname.setText(QCoreApplication.translate("MainWindow", "", None))
-    windowadmin.ui_admin.lineEdit_Lname.setText(QCoreApplication.translate("MainWindow", "", None))
-    windowadmin.ui_admin.label_RFID.setText(QCoreApplication.translate("MainWindow","", None))
-    status_crete_employee = 1
+    global status_crete_employee
+    if number != 8:
+        windowadmin.ui_admin.frame_features_one_employee.show()
+        windowadmin.ui_admin.fram_after_add.hide()
+
+        windowadmin.ui_admin.lineEdit_fname.setText(QCoreApplication.translate("MainWindow", "", None))
+        windowadmin.ui_admin.lineEdit_Lname.setText(QCoreApplication.translate("MainWindow", "", None))
+        windowadmin.ui_admin.label_RFID.setText(QCoreApplication.translate("MainWindow","", None))
+        id_fingerpriint=db.select_number_fingerprint_id()
+        windowadmin.ui_admin.label_id_fingerprint.setText(str(id_fingerpriint))
+
+        status_crete_employee = 1
+
+    elif number == 8:
+        windowadmin.ui_admin.fram_finish_employee()
 
 
 def save_or_edit_employee():
-    if status_crete_employee==1:
+    lenth=len(windowadmin.get_epmloyees())
+    if status_crete_employee==1 and lenth !=7:
         firstName = windowadmin.ui_admin.lineEdit_fname.text()
         lastName = windowadmin.ui_admin.lineEdit_Lname.text()
 
@@ -456,18 +472,34 @@ def save_or_edit_employee():
 
             windowadmin.ui_admin.label_erro_fill.setText("")
             number1=db.select_number_fingerprint_id()
-            number2=number1+1
-            db.maincreatedata(id_rfid_employee,firstName,lastName,str(number1),str(number2),1)
-            db.update_fingerprint_id(number2+1)
+            number2 = number1 + 1
+            result=db.maincreatedata(id_rfid_employee,firstName,lastName,str(number1),str(number2),1)
+            if result==True:
+                db.update_fingerprint_id(number2+1)
 
             #update list
 
             windowadmin.show_button_employee()
             windowadmin.update_list_employee()
-
+            status_crete_employee == 0
 
     else:
+        # setIDrfid(windowadmin.get_rfid_select_employee())
+        # firstName = windowadmin.ui_admin.lineEdit_fname.text()
+        # lastName = windowadmin.ui_admin.lineEdit_Lname.text()
+        # id_employee=windowadmin.get_id()
         pass
+
+
+
+       # db.update_employee_select(firstName,lastName,,id_employee)
+
+
+
+
+
+
+##--------------------------------------
 
 
 def change_icon_lamp():

@@ -362,27 +362,27 @@ class Ui_MainWindowAdmin(object):
 "}")
         ########first page###############3
 
-        self.fram_first_time = QFrame(self.centralwidget)
-        self.fram_first_time.setObjectName(u"fram_first_time")
-        self.fram_first_time.setGeometry(QRect(770, 30, 401, 651))
-        self.fram_first_time.setFrameShape(QFrame.StyledPanel)
-        self.fram_first_time.setFrameShadow(QFrame.Raised)
-        self.label_text_first = QLabel(self.fram_first_time)
-        self.label_text_first.setObjectName(u"label_text_first")
-        self.label_text_first.setGeometry(QRect(70, 250, 331, 111))
-        self.label_text_first.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-                                            "font: 14pt \"MS Shell Dlg 2\";")
-        self.label_2_text_first = QLabel(self.fram_first_time)
-        self.label_2_text_first.setObjectName(u"label_2_text_first")
-        self.label_2_text_first.setGeometry(QRect(110, 450, 51, 20))
-        self.label_2_text_first.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-                                              "font: 10pt \"MS Shell Dlg 2\";")
-        self.button_add_first = QPushButton(self.fram_first_time)
-        self.button_add_first.setObjectName(u"button_add_first")
-        self.button_add_first.setGeometry(QRect(200, 440, 41, 41))
-        self.button_add_first.setStyleSheet(u"border-radius: 30px;")
-        self.button_add_first.setIcon(icon)
-        self.button_add_first.setIconSize(QSize(40, 40))
+        # self.fram_first_time = QFrame(self.centralwidget)
+        # self.fram_first_time.setObjectName(u"fram_first_time")
+        # self.fram_first_time.setGeometry(QRect(770, 30, 401, 651))
+        # self.fram_first_time.setFrameShape(QFrame.StyledPanel)
+        # self.fram_first_time.setFrameShadow(QFrame.Raised)
+        # self.label_text_first = QLabel(self.fram_first_time)
+        # self.label_text_first.setObjectName(u"label_text_first")
+        # self.label_text_first.setGeometry(QRect(70, 250, 331, 111))
+        # self.label_text_first.setStyleSheet(u"color: rgb(255, 255, 255);\n"
+        #                                     "font: 14pt \"MS Shell Dlg 2\";")
+        # self.label_2_text_first = QLabel(self.fram_first_time)
+        # self.label_2_text_first.setObjectName(u"label_2_text_first")
+        # self.label_2_text_first.setGeometry(QRect(110, 450, 51, 20))
+        # self.label_2_text_first.setStyleSheet(u"color: rgb(255, 255, 255);\n"
+        #                                       "font: 10pt \"MS Shell Dlg 2\";")
+        # self.button_add_first = QPushButton(self.fram_first_time)
+        # self.button_add_first.setObjectName(u"button_add_first")
+        # self.button_add_first.setGeometry(QRect(200, 440, 41, 41))
+        # self.button_add_first.setStyleSheet(u"border-radius: 30px;")
+        # self.button_add_first.setIcon(icon)
+        # self.button_add_first.setIconSize(QSize(40, 40))
 
         self.label_erro_fill = QLabel(self.frame_features_one_employee)
         self.label_erro_fill.setObjectName(u"label_erro_fill")
@@ -408,6 +408,56 @@ class Ui_MainWindowAdmin(object):
         self.image_admin.setGeometry(QRect(53, 28, 81, 81))
         self.image_admin.setStyleSheet(u"background-image: url(:/rsz_arash_golsaz.png);\n"
 "border-radius: 40px;")
+
+
+        #after add
+        self.fram_after_add = QFrame(self.centralwidget)
+        self.fram_after_add.setObjectName(u"fram_after_add")
+        self.fram_after_add.setGeometry(QRect(770, -60, 401, 651))
+        self.fram_after_add.setFrameShape(QFrame.StyledPanel)
+        self.fram_after_add.setFrameShadow(QFrame.Raised)
+        self.label_text_first = QLabel(self.fram_after_add)
+        self.label_text_first.setObjectName(u"label_text_first")
+        self.label_text_first.setGeometry(QRect(70, 240, 331, 111))
+        self.label_text_first.setStyleSheet(u"color: rgb(255, 255, 255);\n"
+                                            "font: 14pt \"MS Shell Dlg 2\";")
+        self.label_2_text_first = QLabel(self.fram_after_add)
+        self.label_2_text_first.setObjectName(u"label_2_text_first")
+        self.label_2_text_first.setGeometry(QRect(100, 540, 51, 20))
+        self.label_2_text_first.setStyleSheet(u"color: rgb(255, 255, 255);\n"
+                                              "font: 10pt \"MS Shell Dlg 2\";")
+        self.button_add_first = QPushButton(self.fram_after_add)
+        self.button_add_first.setObjectName(u"button_add_first")
+        self.button_add_first.setGeometry(QRect(180, 530, 41, 41))
+        self.button_add_first.setStyleSheet(u"border-radius: 30px;")
+        self.button_add_first.setIcon(icon)
+        self.button_add_first.setIconSize(QSize(40, 40))
+        self.label_6 = QLabel(self.fram_after_add)
+        self.label_6.setObjectName(u"label_6")
+        self.label_6.setGeometry(QRect(180, 350, 55, 21))
+        self.label_6.setStyleSheet(u"color: rgb(0, 173, 238);\n"
+                                   "font: 75 14pt \"MS Shell Dlg 2\";")
+        self.label_text_first_2 = QLabel(self.fram_after_add)
+        self.label_text_first_2.setObjectName(u"label_text_first_2")
+        self.label_text_first_2.setGeometry(QRect(100, 360, 231, 111))
+        self.label_text_first_2.setStyleSheet(u"color: rgb(255, 255, 255);\n"
+                                              "font: 14pt \"MS Shell Dlg 2\";")
+
+
+        #finishhhh
+        self.fram_finish_employee = QFrame(self.centralwidget)
+        self.fram_finish_employee.setObjectName(u"fram_finish_employee")
+        self.fram_finish_employee.setGeometry(QRect(780, -60, 451, 681))
+        self.fram_finish_employee.setFrameShape(QFrame.StyledPanel)
+        self.fram_finish_employee.setFrameShadow(QFrame.Raised)
+        self.labe_text_finish_employee = QLabel(self.fram_finish_employee)
+        self.labe_text_finish_employee.setObjectName(u"labe_text_finish_employee")
+        self.labe_text_finish_employee.setGeometry(QRect(70, 520, 301, 31))
+        self.labe_text_finish_employee.setStyleSheet(u"color: rgb(0, 173, 238);\n"
+                                                     "font: 75 14pt \"MS Shell Dlg 2\";")
+
+
+
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -450,10 +500,15 @@ class Ui_MainWindowAdmin(object):
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"active", None))
         self.pushButton_export.setText("")
         self.image_admin.setText("")
-        self.label_text_first.setText(QCoreApplication.translate("MainWindow", u"please add your first employee", None))
+        self.label_erro_fill.setText("")
+        self.label_text_first.setText(QCoreApplication.translate("MainWindow", u"please add new employee", None))
         self.label_2_text_first.setText(QCoreApplication.translate("MainWindow", u"press", None))
         self.button_add_first.setText("")
-        self.label_erro_fill.setText("")
+        self.label_6.setText(QCoreApplication.translate("MainWindow", u"OR", None))
+        self.label_text_first_2.setText(QCoreApplication.translate("MainWindow", u"select any employee", None))
+        self.labe_text_finish_employee.setText(
+            QCoreApplication.translate("MainWindow", u"please select any employee", None))
+
         self.employee1.hide()
         self.employee2.hide()
         self.employee3.hide()

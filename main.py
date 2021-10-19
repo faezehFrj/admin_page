@@ -23,12 +23,24 @@ class MainWindowAdmin(QMainWindow):
         self.ui_admin = Ui_MainWindowAdmin()
         self.ui_admin.setupUi(self)
         # show hours and data
-        self.ui_admin.fram_first_time.hide()
+        self.ui_admin.fram_after_add.hide()
         self.ui_admin.frame_features_one_employee.hide()
+        self.ui_admin.fram_finish_employee.hide()
         self.setWindowFlag(Qt.FramelessWindowHint)
 
         #reade all employee from db
         self.epmloyees = db.main_select_all_employee()
+
+        if len(self.epmloyees)<8 and len(self.epmloyees)!=0:
+            self.ui_admin.fram_after_add.show()
+
+        elif len(self.epmloyees)==0:
+            self.ui_admin.label_6.hide()
+            self.ui_admin.label_text_first_2.hide()
+            self.ui_admin.fram_after_add.show()
+
+        elif len(self.epmloyees)==8:
+            self.ui_admin.fram_finish_employee.show()
 
         #show button employee
         self.show_button_employee()
@@ -46,8 +58,11 @@ class MainWindowAdmin(QMainWindow):
         self.ui_admin.employee8.clicked.connect(lambda: self.show_features_employee(7))
 
 
+
+
     def show_features_employee(self,id_employee_choose):
         #print(id_employee_choose)
+        self.ui_admin.fram_after_add.hide()
         self.ui_admin.frame_features_one_employee.show()
         name = self.epmloyees[id_employee_choose][2]
         family = self.epmloyees[id_employee_choose][3]
@@ -68,6 +83,7 @@ class MainWindowAdmin(QMainWindow):
         else:
             self.ui_admin.label_message_number_fingerprint.setText("fingerprint has saved")
         self.set_id(self.epmloyees[id_employee_choose][0])
+        self.set_rfid_select_employee(self.epmloyees[id_employee_choose][1])
         #self.ui_admin.label_message_number_fingerprint.setText(self.epmloyees[id_employee_choose][4])
 
 
@@ -79,7 +95,6 @@ class MainWindowAdmin(QMainWindow):
         # for i in a:
         #     print(i)
         # a[1].show()
-        print("he")
         for j in range(len(epmloyees)):
             array=[]
             frams[j].show()
@@ -98,6 +113,20 @@ class MainWindowAdmin(QMainWindow):
 
     def update_list_employee(self):
         self.epmloyees = db.main_select_all_employee()
+
+    def get_epmloyees(self):
+        return self.epmloyees
+
+    def get_rfid_select_employee(self):
+        return self.frid_employee_select
+
+    def set_rfid_select_employee(self, rfid_select):
+        self.frid_employee_select=rfid_select
+
+    def get_number_employee(self):
+        return len(self.epmloyees)
+
+
 # YOUR APPLICATION
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -229,6 +258,12 @@ class MainWindow(QMainWindow):
         self.ui.circularProgressH.setStyleSheet(styleSheetNew)
 
         self.ui.label_humidity.setText(QCoreApplication.translate("MainWindow", str(value), None))
+
+class AlarmSaveEmployee(QMainWindow):
+    def __init__(self):
+        QMainWindow.__init__(self)
+        self.ui_admin = Ui_MainWindowAdmin()
+        self.ui_admin.setupUi(self)
 
 
 

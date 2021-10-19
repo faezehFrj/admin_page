@@ -209,11 +209,11 @@ def maincreatedata(RFIDcode, FirstName, LastName, finger1, finger2, Status):
             employee = (RFIDcode, FirstName, LastName, finger1, finger2, 0, Status)
             # employee = ('C6BFFDAEl', 'arashh', 'golsaz', '1')
             employee_id = create_employee(conn, employee)
-            return 'successfull'
+            return True
 
         except sqlite3.IntegrityError:
             print('UNIQUE constraint failed: employeeTable.idCard')
-            return 'UNIQUE constraint failed: employeeTable.idCard'
+            return False
         except Error as e:
             print(e)
 
@@ -373,13 +373,32 @@ def select_number_fingerprint_id():
             sqliteConnection.close()
             print("The SQLite connection is closed")
 
+def update_employee_select(Fname,Lname,rfidCode,idEmployee):
+        try:
+            sqliteConnection = sqlite3.connect('D:\V2.0.0\Programme\qt\DB\ArtaDoor.db')
+            cursor = sqliteConnection.cursor()
+            print("Connected to SQLite")
+            sql_update_query = """Update employeeTable set firsName = ?,lastName=?,RFIDcode=?  WHERE  userID = ?)"""
+            edit = (Fname, Lname,rfidCode,idEmployee)
+            cursor.execute(sql_update_query, edit)
+            # cursor.execute(sql_update_query)
+            sqliteConnection.commit()
+            print("Record Updated successfully ")
+            cursor.close()
 
-if __name__ == '__main__':
+        except sqlite3.Error as error:
+            print("Failed to update sqlite table", error)
+        # finally:
+        #     if sqliteConnection:
+        #         sqliteConnection.close()
+        #         print("The SQLite connection is closed")
+
+# if __name__ == '__main__':
     # maincreatedata("39402094","farnaz","farajzadeha","5","6","1")
     # print(select_employee_by_fingerprint(3))
     # getAllEmployeeAndTime()
     # main_select_all_employee()
     #mainCreateTable()
-    #  mainCreatefingerprintID()
-    print(select_number_fingerprint_id())
-   # update_fingerprint_id(4)
+    # mainCreatefingerprintID()
+    #print(select_number_fingerprint_id())
+    # update_fingerprint_id(4)
