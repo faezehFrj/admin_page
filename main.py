@@ -14,6 +14,12 @@ import DataBase as db
 import pickle
 from ui_adminPage import Ui_MainWindowAdmin
 from uiAlarmSave import Ui_MainWindow_alarm_save
+import jdatetime
+from uiCreateExport import Ui_MainCreateExport
+from exportToExcel import ExportToExcel
+from uiFingerprintPage import Ui_MainWindowFingerprint
+
+
 # import Mqtt
 
 #----------------admin____________________________
@@ -23,6 +29,7 @@ class MainWindowAdmin(QMainWindow):
         QMainWindow.__init__(self)
         self.ui_admin = Ui_MainWindowAdmin()
         self.ui_admin.setupUi(self)
+
         # show hours and data
         self.ui_admin.fram_after_add.hide()
         self.ui_admin.frame_features_one_employee.hide()
@@ -83,7 +90,8 @@ class MainWindowAdmin(QMainWindow):
             self.ui_admin.label_id_fingerprint.setText(self.epmloyees[id_employee_choose][5])
         else:
             self.ui_admin.label_message_number_fingerprint.setText("fingerprint has saved")
-        self.set_id(self.epmloyees[id_employee_choose][0])
+        temp=self.epmloyees[id_employee_choose][0]
+        self.set_id(temp)
         self.set_rfid_select_employee(self.epmloyees[id_employee_choose][1])
         #self.ui_admin.label_message_number_fingerprint.setText(self.epmloyees[id_employee_choose][4])
 
@@ -105,9 +113,9 @@ class MainWindowAdmin(QMainWindow):
             array.append(frams[j])
             self.show_detail_employee.append(array)
 
+
     def set_id(self, id_person):
         self.id_employee_select = id_person
-
 
     def get_id(self):
         return self.id_employee_select
@@ -126,8 +134,71 @@ class MainWindowAdmin(QMainWindow):
 
     def get_number_employee(self):
         return len(self.epmloyees)
+#-------------fingerprint------------------
+
+class MainWindowFingerprint(QMainWindow):
+    def __init__(self):
+        QMainWindow.__init__(self)
+        self.ui_finger = Ui_MainWindowFingerprint()
+        self.ui_finger.setupUi(self)
+        self.setWindowFlag(Qt.FramelessWindowHint)
 
 
+
+
+#------------------------------------------
+class MainCreateExport(QMainWindow):
+
+    def __init__(self):
+        QMainWindow.__init__(self)
+        self.ui_export = Ui_MainCreateExport()
+        self.ui_export.setupUi(self)
+        self.setWindowFlag(Qt.FramelessWindowHint)
+        self.ui_export.comboBox.currentTextChanged.connect(self.combo_selected)
+        self.UiComponents()
+        # connected combobox signal
+
+
+    def UiComponents(self):
+        # creating a check-able combo box object
+        # self.combo_box =self.ui_export.comboBox
+
+
+        # geek list
+        geek_list = ["Farvardin", "Ordibehesht", "khordad", "Tir","Mordad","Shahrivar","Mehr","Aban","Azar","Dey","Bahman","Esfand"]
+
+        # adding list of items to combo box
+        self.ui_export.comboBox.addItems(geek_list)
+
+        # setting style sheet
+        # adding border to down arrow
+        # setting border style to it when it get pressed
+        # self.combo_box.setStyleSheet("QComboBox::down-arrow"
+        #                              "{"
+        #                              "border : 2px solid black;"
+        #                              "}"
+        #                              "QComboBox::down-arrow:pressed"
+        #                              "{"
+        #                              "border-style : dotted;"
+        #                              "}")'
+
+    def combo_selected(self):
+         self.item = self.ui_export.comboBox.currentText()
+
+    def create_export(self,id):
+        print(self.item)
+        print(id)
+        a = ExportToExcel(self.item, id)
+        return a.create_in_file()
+
+
+
+
+
+
+
+
+#----------------------------------------
 # YOUR APPLICATION
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -147,12 +218,16 @@ class MainWindow(QMainWindow):
         self.array_employee = []
     # show hours and data
     def showNowTime(self):
+
         time = QDateTime.currentDateTime()
         hourDisplay = time.toString('hh')
         minuteDisplay = time.toString('mm')
-        yearDisplay = time.toString('yyyy')
-        monthDisplay = time.toString('MM')
-        dayDisplay = time.toString('dd')
+        # yearDisplay = time.toString('yyyy')
+        # monthDisplay = time.toString('MM')
+        # dayDisplay = time.toString('dd')
+        yearDisplay = jdatetime.datetime.now().strftime("%Y")
+        monthDisplay = jdatetime.datetime.now().strftime("%m")
+        dayDisplay = jdatetime.datetime.now().strftime("%d")
         self.timer.start(1000)
         self.ui.label_minute.setText(QCoreApplication.translate("MainWindow", minuteDisplay, None))
         self.ui.label_hour.setText(QCoreApplication.translate("MainWindow", hourDisplay, None))
@@ -270,16 +345,17 @@ class AlarmSaveEmployee(QMainWindow):
         self.setWindowFlag(Qt.FramelessWindowHint)
 
 
-
-# if __name__ == "__main__":
-#    # Mqtt.configmqtt()
-#     app = QApplication(sys.argv)
-#     # window = MainWindow()
-#     # window.showNowTime()
-#     # window.show_employee()
-#     # window.test()
+if __name__ == "__main__":
+   # Mqtt.configmqtt()
+    app = QApplication(sys.argv)
+    # window = MainWindow()
+    # window.showNowTime()
+    # window.show_employee()
+    # window.test()
+    window=MainCreateExport()
+    window.show()
 #
 #     window=MainWindowAdmin()
 #     window.show_button_employee()
 #     window.show()
-#     sys.exit(app.exec_())
+    sys.exit(app.exec_())

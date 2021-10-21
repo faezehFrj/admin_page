@@ -167,7 +167,7 @@ def mainCreateTable():
 
     sql_create_tasks_table = """CREATE TABLE IF NOT EXISTS logTable (
                                     id integer PRIMARY KEY AUTOINCREMENT ,
-                                    date  text,
+                                    date_login  text,
                                     timeInput   text,
                                     timeOutput  text,
                                     idCard  text ,
@@ -235,8 +235,9 @@ def mainCreateLog(date, timeEnter, timeOut, employee_id):
             create_log(conn, log_1)
             return 'successfull'
             print("successfull")
-        except:
+        except sqlite3.Error as error:
             print('some thing is wrong')
+            print(error)
 
 
 def mainCreatefingerprintID():
@@ -324,12 +325,28 @@ def selectEmployeeAndTimeIN(userID):
     ON employeeTable.idCard=logTable.idCard where userID =? and (id=(SELECT MAX(id) FROM logTable))"""
     cursor.execute(sqlite_select_query, (userID,))
     records = cursor.fetchall()
-    # print("Total rows are:  ", len(records))
-    # for row in records:
-    #     print(row)
+    print("Total rows are:  ", len(records))
+    for row in records:
+        print(row)
     cursor.close()
 
+##for export ib excel
 
+def create_export(userID,month):
+
+    sqliteConnection = sqlite3.connect('D:\V2.0.0\Programme\qt\DB\ArtaDoor.db')
+    cursor = sqliteConnection.cursor()
+    nMonth=month+"%"
+    sqlite_select_query = """SELECT firsName,lastName,date,timeInput,timeOutput from employeeTable INNER JOIN logTable 
+    ON employeeTable.idCard=logTable.idCard where userID =? and date like ? """
+    cursor.execute(sqlite_select_query, (userID,nMonth,))
+    records = cursor.fetchall()
+    print("Total rows are:  ", len(records))
+    for row in records:
+        print(row)
+
+    cursor.close()
+    return records
 def getAllEmployeeAndTime():
     sqliteConnection = sqlite3.connect('D:\V2.0.0\Programme\qt\DB\ArtaDoor.db')
     cursor = sqliteConnection.cursor()
@@ -393,12 +410,19 @@ def update_employee_select(Fname,Lname,rfidCode,idEmployee):
         #         sqliteConnection.close()
         #         print("The SQLite connection is closed")
 
-# if __name__ == '__main__':
-    # maincreatedata("39402094","farnaz","farajzadeha","5","6","1")
-    # print(select_employee_by_fingerprint(3))
-    # getAllEmployeeAndTime()
-    # main_select_all_employee()
-    #mainCreateTable()
-    #mainCreatefingerprintID()
-    #print(select_number_fingerprint_id())
-    # update_fingerprint_id(4)
+if __name__ == '__main__':
+#     # maincreatedata("39402094","farnaz","farajzadeha","5","6","1")
+#     # print(select_employee_by_fingerprint(3))
+#     # getAllEmployeeAndTime()
+#     # main_select_all_employee()
+   # mainCreateTable()
+#     #mainCreatefingerprintID()
+#     #print(select_number_fingerprint_id())
+#     # update_fingerprint_id(4)
+#     create_export(2)
+#     #selectEmployeeAndTimeIN("2")
+#         mainCreateLog("2021-10-18", "12:8", "12:8", "9409488")
+#         mainCreateLog("2021-10-12", "12:8", "12:8", "9409488")
+#         mainCreateLog("2021-10-13", "12:8", "12:8", "940948")
+#         mainCreateLog("2021-09-18", "12:8", "12:8", "9409488")
+        create_export(2,"2021-10-10","2021-10-19")

@@ -9,13 +9,14 @@
 ################################################################################
 
 from PySide2.QtCore import (QCoreApplication, QMetaObject, QObject, QPoint,
-    QRect, QSize, QUrl, Qt)
+                            QRect, QSize, QUrl, Qt)
 from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-    QFontDatabase, QIcon, QLinearGradient, QPalette, QPainter, QPixmap,
-    QRadialGradient)
+                           QFontDatabase, QIcon, QLinearGradient, QPalette, QPainter, QPixmap,
+                           QRadialGradient)
 from PySide2.QtWidgets import *
 
 import resources
+
 
 class Ui_MainWindowAdmin(object):
     def setupUi(self, MainWindow):
@@ -26,41 +27,41 @@ class Ui_MainWindowAdmin(object):
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.centralwidget.setStyleSheet(u"QWidget#centralwidget{\n"
-"	background-image:url(:/adminpage_employee.png)\n"
-"}")
+                                         "	background-image:url(:/adminpage_employee.png)\n"
+                                         "}")
         self.icon_dashboard = QLabel(self.centralwidget)
         self.icon_dashboard.setObjectName(u"icon_dashboard")
         self.icon_dashboard.setGeometry(QRect(20, 300, 21, 21))
         self.icon_dashboard.setStyleSheet(u"\n"
-"background-image:url(:/icon_dashboard.png)")
+                                          "background-image:url(:/icon_dashboard.png)")
         self.icon_setting = QLabel(self.centralwidget)
         self.icon_setting.setObjectName(u"icon_setting")
         self.icon_setting.setGeometry(QRect(20, 230, 21, 21))
         self.icon_setting.setStyleSheet(u"\n"
-"background-image:url(:/icon_select_user.svg)")
+                                        "background-image:url(:/icon_select_user.svg)")
         self.icon_dashboard_3 = QLabel(self.centralwidget)
         self.icon_dashboard_3.setObjectName(u"icon_dashboard_3")
         self.icon_dashboard_3.setGeometry(QRect(20, 370, 25, 25))
         self.icon_dashboard_3.setStyleSheet(u"\n"
-"background-image:url(:/icon.svg)")
+                                            "background-image:url(:/icon.svg)")
         self.pushButton_admin_employee = QPushButton(self.centralwidget)
         self.pushButton_admin_employee.setObjectName(u"pushButton_admin_employee")
         self.pushButton_admin_employee.setGeometry(QRect(40, 230, 151, 28))
         self.pushButton_admin_employee.setStyleSheet(u"border-radius: 30px;\n"
-"color: rgb(0, 173, 239);\n"
-"font: 10pt \"MS Shell Dlg 2\";")
+                                                     "color: rgb(0, 173, 239);\n"
+                                                     "font: 10pt \"MS Shell Dlg 2\";")
         self.pushButton_Adashboard = QPushButton(self.centralwidget)
         self.pushButton_Adashboard.setObjectName(u"pushButton_Adashboard")
         self.pushButton_Adashboard.setGeometry(QRect(40, 300, 151, 28))
         self.pushButton_Adashboard.setStyleSheet(u"border-radius: 30px;\n"
-"color: rgb(255, 255, 255);\n"
-"font: 10pt \"MS Shell Dlg 2\";")
+                                                 "color: rgb(255, 255, 255);\n"
+                                                 "font: 10pt \"MS Shell Dlg 2\";")
         self.pushButton_Asetting = QPushButton(self.centralwidget)
         self.pushButton_Asetting.setObjectName(u"pushButton_Asetting")
         self.pushButton_Asetting.setGeometry(QRect(30, 370, 151, 28))
         self.pushButton_Asetting.setStyleSheet(u"border-radius: 30px;\n"
-"color: rgb(255, 255, 255);\n"
-"font: 10pt \"MS Shell Dlg 2\";")
+                                               "color: rgb(255, 255, 255);\n"
+                                               "font: 10pt \"MS Shell Dlg 2\";")
         self.frame_2 = QFrame(self.centralwidget)
         self.frame_2.setObjectName(u"frame_2")
         self.frame_2.setGeometry(QRect(240, 60, 461, 721))
@@ -76,11 +77,11 @@ class Ui_MainWindowAdmin(object):
         self.pushButton_5.setObjectName(u"pushButton_5")
         self.pushButton_5.setGeometry(QRect(10, 20, 118, 138))
         self.pushButton_5.setStyleSheet(u"\n"
-"background-color:\n"
-"qlineargradient(spread:pad, x1:0.487, y1:0, x2:0.516, y2:1, stop:0 rgba(18, 166, 233, 0.6), stop:1 rgba(55, 160, 207, 0.294));\n"
-"border-radius: 13px;\n"
-"\n"
-"")
+                                        "background-color:\n"
+                                        "qlineargradient(spread:pad, x1:0.487, y1:0, x2:0.516, y2:1, stop:0 rgba(18, 166, 233, 0.6), stop:1 rgba(55, 160, 207, 0.294));\n"
+                                        "border-radius: 13px;\n"
+                                        "\n"
+                                        "")
         icon = QIcon()
         icon.addFile(u":/bi_plus-circle.png", QSize(), QIcon.Normal, QIcon.Off)
         self.pushButton_5.setIcon(icon)
@@ -210,12 +211,12 @@ class Ui_MainWindowAdmin(object):
         self.label_t_name.setObjectName(u"label_t_name")
         self.label_t_name.setGeometry(QRect(20, 10, 71, 21))
         self.label_t_name.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-"font: 75 12pt \"MS Shell Dlg 2\";")
+                                        "font: 75 12pt \"MS Shell Dlg 2\";")
         self.label_2 = QLabel(self.frame_features_one_employee)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setGeometry(QRect(100, 10, 71, 21))
         self.label_2.setStyleSheet(u"color: rgb(0, 173, 239);\n"
-"font: 9pt \"MS Shell Dlg 2\";")
+                                   "font: 9pt \"MS Shell Dlg 2\";")
         self.frame_Fname = QFrame(self.frame_features_one_employee)
         self.frame_Fname.setObjectName(u"frame_Fname")
         self.frame_Fname.setGeometry(QRect(80, 110, 291, 61))
@@ -225,21 +226,21 @@ class Ui_MainWindowAdmin(object):
         self.lineEdit_fname.setObjectName(u"lineEdit_fname")
         self.lineEdit_fname.setGeometry(QRect(90, 10, 185, 48))
         self.lineEdit_fname.setStyleSheet(u"QLineEdit{ \n"
-"border: 1px solid rgb(255, 255, 255);\n"
-"border-radius: 10px;\n"
-"background-color:rgb(39, 53, 62);\n"
-"font-size: 18px;\n"
-"color:rgb(255, 255, 255);\n"
-"qproperty-alignment: AlignCenter}")
+                                          "border: 1px solid rgb(255, 255, 255);\n"
+                                          "border-radius: 10px;\n"
+                                          "background-color:rgb(39, 53, 62);\n"
+                                          "font-size: 18px;\n"
+                                          "color:rgb(255, 255, 255);\n"
+                                          "qproperty-alignment: AlignCenter}")
         self.label = QLabel(self.frame_Fname)
         self.label.setObjectName(u"label")
         self.label.setGeometry(QRect(40, 0, 75, 34))
         self.label.setStyleSheet(u"\n"
-"background-color:rgb(0, 173, 239);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 12px;\n"
-"\n"
-"")
+                                 "background-color:rgb(0, 173, 239);\n"
+                                 "color: rgb(255, 255, 255);\n"
+                                 "border-radius: 12px;\n"
+                                 "\n"
+                                 "")
         self.frame_Lname = QFrame(self.frame_features_one_employee)
         self.frame_Lname.setObjectName(u"frame_Lname")
         self.frame_Lname.setGeometry(QRect(80, 180, 291, 61))
@@ -249,22 +250,22 @@ class Ui_MainWindowAdmin(object):
         self.lineEdit_Lname.setObjectName(u"lineEdit_Lname")
         self.lineEdit_Lname.setGeometry(QRect(90, 10, 185, 48))
         self.lineEdit_Lname.setStyleSheet(u"QLineEdit{ \n"
-"border: 1px solid rgb(255, 255, 255);\n"
-"border-radius: 10px;\n"
-"background-color:rgb(39, 53, 62);\n"
-"font-size: 18px;\n"
-"color:rgb(255, 255, 255);\n"
-"qproperty-alignment: AlignCenter}\n"
-"                                      ")
+                                          "border: 1px solid rgb(255, 255, 255);\n"
+                                          "border-radius: 10px;\n"
+                                          "background-color:rgb(39, 53, 62);\n"
+                                          "font-size: 18px;\n"
+                                          "color:rgb(255, 255, 255);\n"
+                                          "qproperty-alignment: AlignCenter}\n"
+                                          "                                      ")
         self.label_3 = QLabel(self.frame_Lname)
         self.label_3.setObjectName(u"label_3")
         self.label_3.setGeometry(QRect(40, 0, 75, 34))
         self.label_3.setStyleSheet(u"\n"
-"background-color:rgb(0, 173, 239);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 12px;\n"
-"\n"
-"")
+                                   "background-color:rgb(0, 173, 239);\n"
+                                   "color: rgb(255, 255, 255);\n"
+                                   "border-radius: 12px;\n"
+                                   "\n"
+                                   "")
         self.frame_RFID = QFrame(self.frame_features_one_employee)
         self.frame_RFID.setObjectName(u"frame_RFID")
         self.frame_RFID.setGeometry(QRect(70, 250, 291, 61))
@@ -274,19 +275,19 @@ class Ui_MainWindowAdmin(object):
         self.label_RFID.setObjectName(u"label_RFID")
         self.label_RFID.setGeometry(QRect(100, 10, 185, 48))
         self.label_RFID.setStyleSheet(u"border: 1px solid rgb(255, 255, 255);\n"
-"border-radius: 10px;\n"
-"font-size: 16px;\n"
-"color:rgb(255, 255, 255);\n"
-"qproperty-alignment: AlignCenter;")
+                                      "border-radius: 10px;\n"
+                                      "font-size: 16px;\n"
+                                      "color:rgb(255, 255, 255);\n"
+                                      "qproperty-alignment: AlignCenter;")
         self.label_5 = QLabel(self.frame_RFID)
         self.label_5.setObjectName(u"label_5")
         self.label_5.setGeometry(QRect(50, 0, 75, 34))
         self.label_5.setStyleSheet(u"\n"
-"background-color:rgb(0, 173, 239);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 12px;\n"
-"\n"
-"")
+                                   "background-color:rgb(0, 173, 239);\n"
+                                   "color: rgb(255, 255, 255);\n"
+                                   "border-radius: 12px;\n"
+                                   "\n"
+                                   "")
         self.frame_fingerprint = QFrame(self.frame_features_one_employee)
         self.frame_fingerprint.setObjectName(u"frame_fingerprint")
         self.frame_fingerprint.setGeometry(QRect(100, 450, 251, 61))
@@ -296,43 +297,43 @@ class Ui_MainWindowAdmin(object):
         self.label_id_fingerprint.setObjectName(u"label_id_fingerprint")
         self.label_id_fingerprint.setGeometry(QRect(100, 10, 141, 47))
         self.label_id_fingerprint.setStyleSheet(u"border: 1px solid rgb(255, 255, 255);\n"
-"border-radius: 10px;\n"
-"font-size: 18px;\n"
-"color: rgb(255, 255, 255);\n"
-"qproperty-alignment: AlignCenter")
+                                                "border-radius: 10px;\n"
+                                                "font-size: 18px;\n"
+                                                "color: rgb(255, 255, 255);\n"
+                                                "qproperty-alignment: AlignCenter")
         self.label_12 = QLabel(self.frame_fingerprint)
         self.label_12.setObjectName(u"label_12")
         self.label_12.setGeometry(QRect(40, 0, 75, 34))
         self.label_12.setStyleSheet(u"\n"
-"background-color:rgb(0, 173, 239);\n"
-"color: rgb(255, 255, 255);\n"
-"border-radius: 12px;\n"
-"\n"
-"")
+                                    "background-color:rgb(0, 173, 239);\n"
+                                    "color: rgb(255, 255, 255);\n"
+                                    "border-radius: 12px;\n"
+                                    "\n"
+                                    "")
         self.label_7 = QLabel(self.frame_features_one_employee)
         self.label_7.setObjectName(u"label_7")
         self.label_7.setGeometry(QRect(120, 400, 71, 31))
         self.label_7.setStyleSheet(u"font: 9pt \"MS Shell Dlg 2\";\n"
-"\n"
-"color: rgb(0, 173, 239);")
+                                   "\n"
+                                   "color: rgb(0, 173, 239);")
         self.label_message_number_fingerprint = QLabel(self.frame_features_one_employee)
         self.label_message_number_fingerprint.setObjectName(u"label_message_number_fingerprint")
         self.label_message_number_fingerprint.setGeometry(QRect(200, 520, 151, 20))
         self.label_message_number_fingerprint.setStyleSheet(u"color: rgb(206, 206, 206);\n"
-"")
+                                                            "")
         self.pushButton_save = QPushButton(self.frame_features_one_employee)
         self.pushButton_save.setObjectName(u"pushButton_save")
         self.pushButton_save.setGeometry(QRect(0, 720, 561, 81))
         self.pushButton_save.setStyleSheet(u"QPushButton#pushButton_save{\n"
-"background: rgba(0, 173, 239, 0.3);\n"
-"border-radius: 6.80774px;\n"
-"color: rgb(255, 255, 255);\n"
-"font: 10pt \"MS Shell Dlg 2\";\n"
-"}\n"
-"QPushButton#pushButton_save:pressed {\n"
-"    background-color: rgb(127, 132, 137);\n"
-"    border-style: inset;\n"
-"}")
+                                           "background: rgba(0, 173, 239, 0.3);\n"
+                                           "border-radius: 6.80774px;\n"
+                                           "color: rgb(255, 255, 255);\n"
+                                           "font: 10pt \"MS Shell Dlg 2\";\n"
+                                           "}\n"
+                                           "QPushButton#pushButton_save:pressed {\n"
+                                           "    background-color: rgb(127, 132, 137);\n"
+                                           "    border-style: inset;\n"
+                                           "}")
         self.pushButton_save_finger = QPushButton(self.frame_features_one_employee)
         self.pushButton_save_finger.setObjectName(u"pushButton_save_finger")
         self.pushButton_save_finger.setGeometry(QRect(330, 440, 99, 96))
@@ -345,21 +346,21 @@ class Ui_MainWindowAdmin(object):
         self.checkBox_active.setObjectName(u"checkBox_active")
         self.checkBox_active.setGeometry(QRect(440, 20, 51, 31))
         self.checkBox_active.setStyleSheet(u"QCheckBox {\n"
-"    spacing: 5px;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator {\n"
-"    width: 40px;\n"
-"    height: 35px;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:unchecked {\n"
-"    image: url(:/switch_able.png)\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:checked {\n"
-"    image: url(:/switch_disable.png)\n"
-"}")
+                                           "    spacing: 5px;\n"
+                                           "}\n"
+                                           "\n"
+                                           "QCheckBox::indicator {\n"
+                                           "    width: 40px;\n"
+                                           "    height: 35px;\n"
+                                           "}\n"
+                                           "\n"
+                                           "QCheckBox::indicator:unchecked {\n"
+                                           "    image: url(:/switch_able.png)\n"
+                                           "}\n"
+                                           "\n"
+                                           "QCheckBox::indicator:checked {\n"
+                                           "    image: url(:/switch_disable.png)\n"
+                                           "}")
         ########first page###############3
 
         # self.fram_first_time = QFrame(self.centralwidget)
@@ -390,7 +391,6 @@ class Ui_MainWindowAdmin(object):
         self.label_erro_fill.setStyleSheet(u"\n"
                                            "color: rgb(255, 255, 127);")
 
-
         self.label_4 = QLabel(self.frame_features_one_employee)
         self.label_4.setObjectName(u"label_4")
         self.label_4.setGeometry(QRect(400, 20, 51, 31))
@@ -407,10 +407,9 @@ class Ui_MainWindowAdmin(object):
         self.image_admin.setObjectName(u"image_admin")
         self.image_admin.setGeometry(QRect(53, 28, 81, 81))
         self.image_admin.setStyleSheet(u"background-image: url(:/rsz_arash_golsaz.png);\n"
-"border-radius: 40px;")
+                                       "border-radius: 40px;")
 
-
-        #after add
+        # after add
         self.fram_after_add = QFrame(self.centralwidget)
         self.fram_after_add.setObjectName(u"fram_after_add")
         self.fram_after_add.setGeometry(QRect(770, -60, 401, 651))
@@ -443,8 +442,7 @@ class Ui_MainWindowAdmin(object):
         self.label_text_first_2.setStyleSheet(u"color: rgb(255, 255, 255);\n"
                                               "font: 14pt \"MS Shell Dlg 2\";")
 
-
-        #finishhhh
+        # finishhhh
         self.fram_finish_employee = QFrame(self.centralwidget)
         self.fram_finish_employee.setObjectName(u"fram_finish_employee")
         self.fram_finish_employee.setGeometry(QRect(780, -60, 451, 681))
@@ -456,13 +454,22 @@ class Ui_MainWindowAdmin(object):
         self.labe_text_finish_employee.setStyleSheet(u"color: rgb(0, 173, 238);\n"
                                                      "font: 75 14pt \"MS Shell Dlg 2\";")
 
+        # beller
 
+        #         self.frame_beller = QFrame(self.centralwidget)
+        #         self.frame_beller.setObjectName(u"frame_beller")
+        #         self.frame_beller.setGeometry(QRect(0, 0, 1280, 800))
+        #         self.frame_beller.setStyleSheet(u"background: rgba(39, 74, 89,0.6);\n"
+        # "")
+        #         self.frame_beller.setFrameShape(QFrame.StyledPanel)
+        #         self.frame_beller.setFrameShadow(QFrame.Raised)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
 
         QMetaObject.connectSlotsByName(MainWindow)
+
     # setupUi
 
     def retranslateUi(self, MainWindow):
@@ -485,15 +492,24 @@ class Ui_MainWindowAdmin(object):
         self.label_t_name.setText(QCoreApplication.translate("MainWindow", u"Fill", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u" ", None))
         self.lineEdit_fname.setText(QCoreApplication.translate("MainWindow", u"", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\">Fname</p></body></html>", None))
+        self.label.setText(
+            QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\">Fname</p></body></html>",
+                                       None))
         self.lineEdit_Lname.setText(QCoreApplication.translate("MainWindow", u"", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\">Lname</p></body></html>", None))
+        self.label_3.setText(
+            QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\">Lname</p></body></html>",
+                                       None))
         self.label_RFID.setText(QCoreApplication.translate("MainWindow", u"", None))
-        self.label_5.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\">RFID</p></body></html>", None))
+        self.label_5.setText(
+            QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\">RFID</p></body></html>",
+                                       None))
         self.label_id_fingerprint.setText(QCoreApplication.translate("MainWindow", u"1", None))
-        self.label_12.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\">ID</p></body></html>", None))
+        self.label_12.setText(
+            QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\">ID</p></body></html>",
+                                       None))
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"Fingeprint", None))
-        self.label_message_number_fingerprint.setText(QCoreApplication.translate("MainWindow", u"No fingerprint saved", None))
+        self.label_message_number_fingerprint.setText(
+            QCoreApplication.translate("MainWindow", u"No fingerprint saved", None))
         self.pushButton_save.setText(QCoreApplication.translate("MainWindow", u"save", None))
         self.pushButton_save_finger.setText("")
         self.checkBox_active.setText("")
@@ -519,8 +535,7 @@ class Ui_MainWindowAdmin(object):
         self.employee8.hide()
 
     def add_framEmployee_array(self):
-
-        array_framEmployee=[]
+        array_framEmployee = []
         array_framEmployee.append(self.employee1)
         array_framEmployee.append(self.employee2)
         array_framEmployee.append(self.employee3)
@@ -532,5 +547,14 @@ class Ui_MainWindowAdmin(object):
 
         return array_framEmployee
 
-    # retranslateUi
+    def blur(self,mount):
+        # creating a blur effect
+        self.blur_effect = QGraphicsBlurEffect()
 
+        # setting blur radius
+        self.blur_effect.setBlurRadius(mount)
+
+        # adding blur effect to the label
+        self.centralwidget.setGraphicsEffect(self.blur_effect)
+
+    # retranslateUi

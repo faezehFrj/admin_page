@@ -6,6 +6,14 @@ import threading
 import main as ui
 from PySide2.QtGui import QIcon
 from PySide2.QtCore import QSize, QCoreApplication
+import jdatetime
+
+
+from PyQt5.QtWidgets import *
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+import sys
 
 Connected = False  # global variable for the state of the connection
 broker_address = "127.0.0.1"  # Broker address
@@ -22,6 +30,8 @@ app = ui.QApplication(ui.sys.argv)
 window = ui.MainWindow()
 windowadmin = ui.MainWindowAdmin()
 windowAlarmEmployee = ui.AlarmSaveEmployee()
+windowExport=ui.MainCreateExport()
+windowFingerPrint=ui.MainWindowFingerprint()
 window.showNowTime()
 window.show_employee()
 
@@ -216,7 +226,7 @@ def detrmineStatusButton(resultDB):
     global buttonClicked
 
     now = datetime.now()
-    today = now.strftime("%Y-%m-%d")
+    today = jdatetime.datetime.now().strftime("%Y-%m-%d")
     current_time = now.strftime("%H:%M")
     print(buttonClicked)
     if buttonClicked == 1:
@@ -345,7 +355,46 @@ def function_button():
     windowadmin.ui_admin.button_add_first.clicked.connect(create_new_employee)
     windowadmin.ui_admin.pushButton_save.clicked.connect(save_or_edit_employee)
     windowadmin.ui_admin.pushButton_Adashboard.clicked.connect(back_dashboard)
+    windowadmin.ui_admin.pushButton_export.clicked.connect(show_export_page)
+    windowadmin.ui_admin.pushButton_save_finger.clicked.connect(show_finger_print_page)
     windowAlarmEmployee.ui_alarm_save.pushButton_alarm_save.clicked.connect(close_save_window)
+    windowExport.ui_export.pushButton_ok.clicked.connect(create_export)
+    windowExport.ui_export.pushButton_close.clicked.connect(close_page_export)
+    windowFingerPrint.ui_finger.pushButton_click.clicked.connect(close_page_fingerprint)
+
+
+#-------------------export------------------------
+def show_export_page():
+    windowExport.ui_export.lable_result_export.setText(" ")
+    windowExport.show()
+    windowadmin.ui_admin.blur(2)
+
+def close_page_export():
+    windowExport.hide()
+    windowadmin.ui_admin.blur(0)
+
+
+def create_export():
+    result=windowExport.create_export(windowadmin.id_employee_select)
+    if result==True:
+        windowExport.ui_export.lable_result_export.setText("export successful")
+    else:
+        windowExport.ui_export.lable_result_export.setText("There isn't any data")
+
+#---------------export---------------------------
+
+#---------------fingerprint----------------------
+def show_finger_print_page():
+    windowFingerPrint.show()
+    # creating a blur effect
+    windowadmin.ui_admin.blur(3)
+
+
+def close_page_fingerprint() :
+    windowFingerPrint.hide()
+    windowadmin.ui_admin.blur(0)
+#---------------fingerprint----------------------
+
 
 
 def close_save_window():
