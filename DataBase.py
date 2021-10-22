@@ -410,6 +410,30 @@ def update_employee_select(Fname,Lname,rfidCode,idEmployee):
         #         sqliteConnection.close()
         #         print("The SQLite connection is closed")
 
+
+#update number statis_finger
+
+def update_number_status_finger(userID,number):
+    try:
+        sqliteConnection = sqlite3.connect('D:\V2.0.0\Programme\qt\DB\ArtaDoor.db')
+        cursor = sqliteConnection.cursor()
+        print("Connected to SQLite")
+        sql_update_query = """Update employeeTable set statis_finger=?  WHERE  userID = ?"""
+        edit = (number,userID)
+        cursor.execute(sql_update_query, edit)
+        # cursor.execute(sql_update_query)
+        sqliteConnection.commit()
+        print("Record Updated successfully ")
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to update sqlite table", error)
+    # finally:
+    #     if sqliteConnection:
+    #         sqliteConnection.close()
+    #         print("The SQLite connection is closed")
+
+
 if __name__ == '__main__':
 #     # maincreatedata("39402094","farnaz","farajzadeha","5","6","1")
 #     # print(select_employee_by_fingerprint(3))

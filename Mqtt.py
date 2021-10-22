@@ -383,11 +383,19 @@ def create_export():
 
 #---------------export---------------------------
 
+
+
 #---------------fingerprint----------------------
 def show_finger_print_page():
-    windowFingerPrint.show()
-    # creating a blur effect
-    windowadmin.ui_admin.blur(3)
+    if windowadmin.number_id_fingerprint_save != 2:
+        windowFingerPrint.show()
+        createFingerprint(windowadmin.enroll_id_fingerprint)
+        # creating a blur effect
+        windowadmin.ui_admin.blur(3)
+
+
+    else:
+        windowFingerPrint.ui_admin.label_message_number_fingerprint.setText("fingerprint has saved")
 
 
 def close_page_fingerprint() :
@@ -561,6 +569,7 @@ def save_or_edit_employee():
 
 
 def change_icon_lamp():
+
     global icon_light_on, icon_light_off
     icon_light_on = QIcon()
     icon_light_off = QIcon()
