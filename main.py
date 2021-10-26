@@ -7,7 +7,8 @@ from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont, QFo
                            QLinearGradient, QPalette, QPainter, QPixmap, QRadialGradient)
 from PyQt5.QtCore import QTimer, QDateTime
 from PySide2.QtWidgets import *
-from uiDesignQT import Ui_MainWindow
+# from uiDesignQT import Ui_MainWindow
+from uiDashboardResize import Ui_MainWindow
 from datetime import datetime
 from employee import Person
 import DataBase as db
@@ -205,6 +206,8 @@ class MainWindow(QMainWindow):
         QMainWindow.__init__(self)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.records=[]
+        self.setWindowFlag(Qt.FramelessWindowHint)
         # show hours and data
         self.timer = QTimer()
         self.timer.timeout.connect(self.showNowTime)
@@ -232,7 +235,7 @@ class MainWindow(QMainWindow):
         self.ui.label_minute.setText(QCoreApplication.translate("MainWindow", minuteDisplay, None))
         self.ui.label_hour.setText(QCoreApplication.translate("MainWindow", hourDisplay, None))
         self.ui.label_year.setText(QCoreApplication.translate("MainWindow", yearDisplay, None))
-        self.ui.label_3.setText(QCoreApplication.translate("MainWindow", monthDisplay, None))
+        self.ui.label_13.setText(QCoreApplication.translate("MainWindow", monthDisplay, None))
         self.ui.label_day.setText(QCoreApplication.translate("MainWindow", dayDisplay, None))
 
         if self.today < datetime.today().date():
@@ -252,9 +255,9 @@ class MainWindow(QMainWindow):
     #     sys.exit(app.exec_())
 
     def show_employee(self):
-        records = db.getAllEmployeeAndTime()
+        self.records = db.getAllEmployeeAndTime()
 
-        for row in records:
+        for row in self.records:
             p = Person(row[1], self.ui.frame_employees)
             temp_array = []
             self.ui.verticalLayout.addWidget(p.config())
@@ -262,8 +265,25 @@ class MainWindow(QMainWindow):
             temp_array.append(p)
             self.array_employee.append(temp_array)
 
-        for row in range(len(self.array_employee)):
-            print(self.array_employee[row][0])
+            #new add show last status
+
+            time=db.selectEmployeeAndTimeIN(row[2])
+            if len(time)!=0:
+                p.label_tim_login.setText(time[0][0])
+                p.label_tim_login.setStyleSheet(u"color: rgb(255, 255, 255);\n"
+                                               "font: 25 9pt \"Segoe UI Light\";")
+                p.label_name_employee.setStyleSheet(u"color: rgb(255, 255, 255);\n"
+                                               "font: 25 9pt \"Segoe UI Light\";")
+                if time[0][1]!="":
+                    p.label_time_logOut.setText(time[0][1])
+                    p.label_tim_login.setStyleSheet(u"color: rgb(127, 132, 137);\n"
+                                                    "font: 25 9pt \"Segoe UI Light\";")
+                    p.label_name_employee.setStyleSheet(u"color:  rgb(127, 132, 137);\n"
+                                                        "font: 25 9pt \"Segoe UI Light\";")
+
+
+        # for row in range(len(self.array_employee)):
+        #     print(self.array_employee[row][1])
 
     def get_list_employee(self):
         return self.array_employee
@@ -276,21 +296,21 @@ class MainWindow(QMainWindow):
             if 1 == array[rows][0]:
                 person = array[rows][1]
                 person.label_tim_login.setStyleSheet(u"color: rgb(255, 255, 12);\n"
-                                                     "font: 25 10pt \"Segoe UI Light\";")
+                                                     "font: 25 8pt \"Segoe UI Light\";")
                 break
 
     def change_color_form_employee(self):
 
         self.ui.label_name_employee.setStyleSheet(u"color: rgb(124, 124, 124);\n"
-                                                  "font: 25 10pt \"Segoe UI Light\";")
+                                                  "font: 25 8pt \"Segoe UI Light\";")
         self.ui.label_time.setStyleSheet(u"color: rgb(124, 124, 124);\n"
-                                         "font: 25 10pt \"Segoe UI Light\";")
+                                         "font: 25 8pt \"Segoe UI Light\";")
 
     def tempratureBarValue(self, value):
 
         styleSheet = """
-            border-radius:115px;
-            background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90, stop:{stop_1} rgba(255, 85, 255, 0), stop:{stop_2} rgba(253, 54, 11, 80));
+            border-radius:90px;
+            background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90, stop:0.749 rgba(255, 85, 255, 0), stop:0.75 rgba(253, 54, 11, 80));
         """
 
         progress = (100 - value) / 100.0
@@ -309,8 +329,9 @@ class MainWindow(QMainWindow):
     def humidBarValue(self, value):
 
         styleSheet = """
-            border-radius:115px;
-            background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90, stop:{STOP_1} rgba(255, 85, 255, 0), stop:{STOP_2} rgba(115, 161, 206, 255));
+         border-radius:90px;
+        background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90, stop:0.749 rgba(255, 85, 255, 0), stop:0.75 rgba(115, 161, 206, 255));
+
         """
 
         progress = (100 - value) / 100.0

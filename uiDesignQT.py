@@ -517,3 +517,11 @@ class Ui_MainWindow(object):
         # self.label_time_logOut.setText(QCoreApplication.translate("MainWindow", u"08:34", None))
     # retranslateUi
 
+    def change_icon_lamp(self):
+            # global icon_light_on, icon_light_off
+            self.icon_light_on = QIcon()
+            self.icon_light_off = QIcon()
+            self.icon_light_on.addFile(u"D:/V2.0.0/Programme/qt/UI design/picture/btnLamp2.png", QSize(), QIcon.Normal,
+                                  QIcon.Off)
+            self.icon_light_off.addFile(u"D:/V2.0.0/Programme/qt/UI design/picture/btLampOff.png", QSize(), QIcon.Normal,
+                                   QIcon.Off)

@@ -7,12 +7,14 @@ import main as ui
 from PySide2.QtGui import QIcon
 from PySide2.QtCore import QSize, QCoreApplication
 import jdatetime
+from employee import Person as new_Person
 
 
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+
 import sys
 
 Connected = False  # global variable for the state of the connection
@@ -25,7 +27,7 @@ state_rfid = 0  # baraye in ke bebinim mikhad fard jadid  tarif kone ya in ke mi
 id_rfid_employee = 0
 buttonClicked = 0
 status_crete_employee = 0
-statusLamp = [0, 0, 0, 0, 0, 0, 0, 0]
+statusLamp = [0, 0, 0, 0, 0, 0, 0, 0,0]
 app = ui.QApplication(ui.sys.argv)
 window = ui.MainWindow()
 windowadmin = ui.MainWindowAdmin()
@@ -34,6 +36,7 @@ windowExport=ui.MainCreateExport()
 windowFingerPrint=ui.MainWindowFingerprint()
 window.showNowTime()
 window.show_employee()
+
 
 
 def on_connect(self, userdata, flags, rc):
@@ -121,6 +124,7 @@ def subscribe_all_topic(topic_subscrib, mesege):
     elif "enroll/getImage" == topic_subscrib:
         if "2" == mesege:
             print(".")
+            windowFingerPrint.ui_finger.label_lavel.setStyleSheet(u"color: rgb(65, 187, 255);")
 
 
     elif "enroll/convertToTemplate" == topic_subscrib:
@@ -134,13 +138,16 @@ def subscribe_all_topic(topic_subscrib, mesege):
             "6": "Unknown error"
         }
         print(exception[mesege])
+        windowFingerPrint.ui_finger.alarm.setText(exception[mesege])
 
     elif "enroll/RemoveFinger" == topic_subscrib:
         print(mesege)
+        windowFingerPrint.ui_finger.alarm.setText(" ")
+        windowFingerPrint.ui_finger.label_level2.styleSheet(u"color: rgb(65, 187, 255);")
 
     elif "enroll/store" == topic_subscrib:
         print(mesege)
-
+        windowFingerPrint.ui_finger.label_level4.styleSheet(u"color: rgb(65, 187, 255);")
     # *****find finger print ******#
 
     elif "search/find" == topic_subscrib:
@@ -244,9 +251,9 @@ def detrmineStatusButton(resultDB):
                 person = array[rows][1]
                 # break
                 person.label_tim_login.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-                                                     "font: 25 10pt \"Segoe UI Light\";")
+                                                     "font: 25 9pt \"Segoe UI Light\";")
                 person.label_name_employee.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-                                                         "font: 25 10pt \"Segoe UI Light\";")
+                                                         "font: 25 9pt \"Segoe UI Light\";")
                 person.label_tim_login.setText(current_time)
                 print("click")
         ####set ui log in and log out
@@ -340,7 +347,7 @@ def get_clientvalue():
 
 
 def function_button():
-    change_icon_lamp()
+    window.ui.change_icon_lamp()
     window.ui.button_lamp1.clicked.connect(the_button_was_clicked1)
     window.ui.button_lamp2.clicked.connect(the_button_was_clicked2)
     window.ui.button_lamp3.clicked.connect(the_button_was_clicked3)
@@ -348,6 +355,7 @@ def function_button():
     window.ui.button_lamp5.clicked.connect(the_button_was_clicked5)
     window.ui.button_lamp6.clicked.connect(the_button_was_clicked6)
     window.ui.button_lamp7.clicked.connect(the_button_was_clicked7)
+    window.ui.button_lamp8.clicked.connect(the_button_was_clicked8)
     window.ui.button_door.clicked.connect(the_button_door_clicked)
     window.ui.button_power.clicked.connect(access_all_button)
     window.ui.pushButton_setting.clicked.connect(go_to_admin_page)
@@ -368,6 +376,7 @@ def show_export_page():
     windowExport.ui_export.lable_result_export.setText(" ")
     windowExport.show()
     windowadmin.ui_admin.blur(2)
+
 
 def close_page_export():
     windowExport.hide()
@@ -398,6 +407,7 @@ def show_finger_print_page():
         windowFingerPrint.ui_admin.label_message_number_fingerprint.setText("fingerprint has saved")
 
 
+
 def close_page_fingerprint() :
     windowFingerPrint.hide()
     windowadmin.ui_admin.blur(0)
@@ -414,89 +424,101 @@ def back_dashboard():
     window.show()
 
 
+
 def the_button_was_clicked1():
     if statusLamp[0] == 0:
         publish(client, "", "light1/on")
-        window.ui.button_lamp1.setIcon(icon_light_on)
+        window.ui.button_lamp1.setIcon(window.ui.icon_light_on)
         statusLamp[0] = 1
 
     else:
         publish(client, "", "light1/off")
-        window.ui.button_lamp1.setIcon(icon_light_off)
+        window.ui.button_lamp1.setIcon(window.ui.icon_light_off)
         statusLamp[0] = 0
 
 
 def the_button_was_clicked2():
     if statusLamp[1] == 0:
         publish(client, "", "light2/on")
-        window.ui.button_lamp2.setIcon(icon_light_on)
+        window.ui.button_lamp2.setIcon(window.ui.icon_light_on)
         statusLamp[1] = 1
 
     else:
         publish(client, "", "light2/off")
-        window.ui.button_lamp2.setIcon(icon_light_off)
+        window.ui.button_lamp2.setIcon(window.ui.icon_light_off)
         statusLamp[1] = 0
 
 
 def the_button_was_clicked3():
     if statusLamp[2] == 0:
         publish(client, "", "light3/on")
-        window.ui.button_lamp3.setIcon(icon_light_on)
+        window.ui.button_lamp3.setIcon(window.ui.icon_light_on)
         statusLamp[2] = 1
 
     else:
         publish(client, "", "light3/off")
-        window.ui.button_lamp3.setIcon(icon_light_off)
+        window.ui.button_lamp3.setIcon(window.ui.icon_light_off)
         statusLamp[2] = 0
 
 
 def the_button_was_clicked5():
     if statusLamp[4] == 0:
         publish(client, "", "light3/on")
-        window.ui.button_lamp5.setIcon(icon_light_on)
+        window.ui.button_lamp5.setIcon(window.ui.icon_light_on)
         statusLamp[4] = 1
 
     else:
         publish(client, "", "light3/off")
-        window.ui.button_lamp5.setIcon(icon_light_off)
+        window.ui.button_lamp5.setIcon(window.ui.icon_light_off)
         statusLamp[4] = 0
 
 
 def the_button_was_clicked4():
     if statusLamp[3] == 0:
         publish(client, "", "light3/on")
-        window.ui.button_lamp4.setIcon(icon_light_on)
+        window.ui.button_lamp4.setIcon(window.ui.icon_light_on)
         statusLamp[3] = 1
 
     else:
         publish(client, "", "light3/off")
-        window.ui.button_lamp4.setIcon(icon_light_off)
+        window.ui.button_lamp4.setIcon(window.ui.icon_light_off)
         statusLamp[3] = 0
 
 
 def the_button_was_clicked6():
     if statusLamp[5] == 0:
         publish(client, "", "light6/on")
-        window.ui.button_lamp6.setIcon(icon_light_on)
+        window.ui.button_lamp6.setIcon(window.ui.icon_light_on)
         statusLamp[5] = 1
 
     else:
         publish(client, "", "light6/off")
-        window.ui.button_lamp6.setIcon(icon_light_off)
+        window.ui.button_lamp6.setIcon(window.ui.icon_light_off)
         statusLamp[5] = 0
 
 
 def the_button_was_clicked7():
     if statusLamp[6] == 0:
         publish(client, "", "light7/on")
-        window.ui.button_lamp7.setIcon(icon_light_on)
+        window.ui.button_lamp7.setIcon(window.ui.icon_light_on)
         statusLamp[6] = 1
 
     else:
         publish(client, "", "light7/off")
-        window.ui.button_lamp7.setIcon(icon_light_off)
+        window.ui.button_lamp7.setIcon(window.ui.icon_light_off)
         statusLamp[6] = 0
 
+
+def the_button_was_clicked8():
+    if statusLamp[7] == 0:
+        publish(client, "", "light8/on")
+        window.ui.button_lamp8.setIcon(window.ui.icon_light_on)
+        statusLamp[7] = 1
+
+    else:
+        publish(client, "", "light8/off")
+        window.ui.button_lamp8.setIcon(window.ui.icon_light_off)
+        statusLamp[7] = 0
 
 # -----admin page display-------#
 
@@ -521,6 +543,7 @@ def create_new_employee():
 
         status_crete_employee = 1
 
+
     elif number == 8:
         windowadmin.ui_admin.fram_finish_employee()
 
@@ -544,6 +567,19 @@ def save_or_edit_employee():
                 db.update_fingerprint_id(number2 + 1)
                 windowAlarmEmployee.show()
                 windowAlarmEmployee.ui_alarm_save.labelAlaemEployeeSave.setText("Employee saved")
+
+
+
+                #10/26
+                id_person=db.select_return_id(id_rfid_employee)
+                p=new_Person(firstName,window.ui.frame_employees)
+                temp_array = []
+                window.ui.verticalLayout.addWidget(p.config())
+                temp_array.append(id_person)
+                temp_array.append(p)
+                window.array_employee.append(temp_array)
+
+
                 # update list
 
                 windowadmin.show_button_employee()
@@ -568,13 +604,13 @@ def save_or_edit_employee():
 ##--------------------------------------
 
 
-def change_icon_lamp():
+# def change_icon_lamp():
+#     global icon_light_on, icon_light_off
+#     icon_light_on = QIcon()
+#     icon_light_off = QIcon()
+#     icon_light_on.addFile(u"D:/V2.0.0/Programme/qt/UI design/picture/btnLamp2.png", QSize(), QIcon.Normal, QIcon.Off)
+#     icon_light_off.addFile(u"D:/V2.0.0/Programme/qt/UI design/picture/btLampOff.png", QSize(), QIcon.Normal, QIcon.Off)
 
-    global icon_light_on, icon_light_off
-    icon_light_on = QIcon()
-    icon_light_off = QIcon()
-    icon_light_on.addFile(u"D:/V2.0.0/Programme/qt/UI design/picture/btnLamp2.png", QSize(), QIcon.Normal, QIcon.Off)
-    icon_light_off.addFile(u"D:/V2.0.0/Programme/qt/UI design/picture/btLampOff.png", QSize(), QIcon.Normal, QIcon.Off)
 
 
 def the_button_door_clicked():
@@ -586,19 +622,20 @@ def the_button_door_clicked():
 
 
 def access_all_button():
-    icon4 = QIcon()
-    if statusLamp[7] == 0:
-        icon4.addFile(u"D:/V2.0.0/Programme/qt/UI design/picture/btPowerOn.png", QSize(), QIcon.Normal, QIcon.Off)
+
+    if statusLamp[8] == 0:
+        # icon4.addFile(u"D:/V2.0.0/Programme/qt/UI design/picture/btPowerOn.png", QSize(), QIcon.Normal, QIcon.Off)
+        window.ui.change_icon_power(0)
         window.ui.label_power.setText(QCoreApplication.translate("MainWindow", u"Turn on", None))
-        statusLamp[7] = 1
+        statusLamp[8] = 1
         publish(client, "", "all/lamp/on")
     else:
         publish(client, "", "all/lamp/off")
-        icon4.addFile(u"D:/V2.0.0/Programme/qt/UI design/picture/btPowerOff.png", QSize(), QIcon.Normal, QIcon.Off)
+        window.ui.change_icon_power(1)
         window.ui.label_power.setText(QCoreApplication.translate("MainWindow", u"Turn off", None))
-        statusLamp[7] = 0
+        statusLamp[8] = 0
 
-    window.ui.button_power.setIcon(icon4)
+
 
 
 function_button()
