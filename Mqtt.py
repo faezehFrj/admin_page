@@ -34,6 +34,7 @@ windowadmin = ui.MainWindowAdmin()
 windowAlarmEmployee = ui.AlarmSaveEmployee()
 windowExport=ui.MainCreateExport()
 windowFingerPrint=ui.MainWindowFingerprint()
+windowPassword=ui.PasswordCheck()
 window.showNowTime()
 window.show_employee()
 
@@ -125,7 +126,8 @@ def subscribe_all_topic(topic_subscrib, mesege):
         if "2" == mesege:
             print(".")
             windowFingerPrint.ui_finger.label_lavel.setStyleSheet(u"color: rgb(65, 187, 255);")
-
+        else:
+            windowFingerPrint.ui_finger.alarm.setText(mesege)
 
     elif "enroll/convertToTemplate" == topic_subscrib:
 
@@ -145,9 +147,22 @@ def subscribe_all_topic(topic_subscrib, mesege):
         windowFingerPrint.ui_finger.alarm.setText(" ")
         windowFingerPrint.ui_finger.label_level2.styleSheet(u"color: rgb(65, 187, 255);")
 
+    elif "enroll/getImage2" == topic_subscrib:
+        if "2" == mesege:
+            print(".")
+            windowFingerPrint.ui_finger.label_lavel.setStyleSheet(u"color: rgb(65, 187, 255);")
+        else:
+            windowFingerPrint.ui_finger.alarm.setText(mesege)
+
     elif "enroll/store" == topic_subscrib:
-        print(mesege)
-        windowFingerPrint.ui_finger.label_level4.styleSheet(u"color: rgb(65, 187, 255);")
+        if "Stored!" == mesege:
+            print(mesege)
+            windowFingerPrint.ui_finger.alarm.setText("succssfully")
+            windowFingerPrint.ui_finger.label_level4.styleSheet(u"color: rgb(65, 187, 255);")
+
+        else:
+            windowFingerPrint.ui_finger.alarm.setText(mesege)
+
     # *****find finger print ******#
 
     elif "search/find" == topic_subscrib:
@@ -358,7 +373,8 @@ def function_button():
     window.ui.button_lamp8.clicked.connect(the_button_was_clicked8)
     window.ui.button_door.clicked.connect(the_button_door_clicked)
     window.ui.button_power.clicked.connect(access_all_button)
-    window.ui.pushButton_setting.clicked.connect(go_to_admin_page)
+    # window.ui.pushButton_setting.clicked.connect(go_to_admin_page)
+    window.ui.pushButton_setting.clicked.connect(go_to_varufy_password)
     windowadmin.ui_admin.pushButton_5.clicked.connect(create_new_employee)
     windowadmin.ui_admin.button_add_first.clicked.connect(create_new_employee)
     windowadmin.ui_admin.pushButton_save.clicked.connect(save_or_edit_employee)
@@ -369,6 +385,30 @@ def function_button():
     windowExport.ui_export.pushButton_ok.clicked.connect(create_export)
     windowExport.ui_export.pushButton_close.clicked.connect(close_page_export)
     windowFingerPrint.ui_finger.pushButton_click.clicked.connect(close_page_fingerprint)
+    #-----password
+
+    windowPassword.ui_pass.pushButton_cancel_pass.clicked.connect(back_dashboard)
+    windowPassword.ui_pass.pushButton_check_pass.clicked.connect(varify_password)
+
+
+#-------------varify password--------
+
+def go_to_varufy_password():
+    windowPassword.show()
+    window.ui.blur(2)
+
+def varify_password():
+    my_pass="1212"
+    if windowPassword.ui_pass.lineEdit_password.text() == my_pass:
+        go_to_admin_page()
+        windowPassword.ui_pass.label_alarm_pass.setText("")
+        windowPassword.ui_pass.lineEdit_password.setText("")
+        windowPassword.hide()
+    else:
+        windowPassword.ui_pass.label_alarm_pass.setText("wrong! try again")
+        windowPassword.ui_pass.lineEdit_password.setText("")
+
+
 
 
 #-------------------export------------------------
@@ -396,21 +436,23 @@ def create_export():
 
 #---------------fingerprint----------------------
 def show_finger_print_page():
-    if windowadmin.number_id_fingerprint_save != 2:
-        windowFingerPrint.show()
-        createFingerprint(windowadmin.enroll_id_fingerprint)
-        # creating a blur effect
-        windowadmin.ui_admin.blur(3)
+
+        if windowadmin.number_id_fingerprint_save != 2:
+            windowFingerPrint.show()
+            createFingerprint(windowadmin.enroll_id_fingerprint)
+            # creating a blur effect
+            windowadmin.ui_admin.blur(3)
 
 
-    else:
-        windowFingerPrint.ui_admin.label_message_number_fingerprint.setText("fingerprint has saved")
+        else:
+            windowFingerPrint.ui_admin.label_message_number_fingerprint.setText("fingerprint has saved")
 
 
 
 def close_page_fingerprint() :
     windowFingerPrint.hide()
     windowadmin.ui_admin.blur(0)
+    windowFingerPrint.ui_finger.alarm.setText(" ")
 #---------------fingerprint----------------------
 
 
@@ -422,6 +464,8 @@ def close_save_window():
 def back_dashboard():
     windowadmin.hide()
     window.show()
+    windowPassword.hide()
+    window.ui.blur(0)
 
 
 
@@ -538,8 +582,14 @@ def create_new_employee():
         windowadmin.ui_admin.lineEdit_fname.setText(QCoreApplication.translate("MainWindow", "", None))
         windowadmin.ui_admin.lineEdit_Lname.setText(QCoreApplication.translate("MainWindow", "", None))
         windowadmin.ui_admin.label_RFID.setText(QCoreApplication.translate("MainWindow", "", None))
-        id_fingerpriint = db.select_number_fingerprint_id()
-        windowadmin.ui_admin.label_id_fingerprint.setText(str(id_fingerpriint))
+        windowadmin.ui_admin.pushButton_export.hide()
+        windowadmin.ui_admin.checkBox_active.hide()
+        windowadmin.ui_admin.label_activeOrDi.hide()
+        windowadmin.ui_admin.pushButton_save_finger.hide()
+        windowadmin.ui_admin.label_t_name.setText("Fill")
+
+        id_fingerprint = db.select_number_fingerprint_id()
+        windowadmin.ui_admin.label_id_fingerprint.setText(str(id_fingerprint))
 
         status_crete_employee = 1
 
@@ -567,6 +617,12 @@ def save_or_edit_employee():
                 db.update_fingerprint_id(number2 + 1)
                 windowAlarmEmployee.show()
                 windowAlarmEmployee.ui_alarm_save.labelAlaemEployeeSave.setText("Employee saved")
+                windowadmin.ui_admin.lineEdit_fname.setText("")
+                windowadmin.ui_admin.lineEdit_Lname.setText("")
+                windowadmin.ui_admin.label_RFID.setText("")
+                windowadmin.ui_admin.label_id_fingerprint.setText(str(number2 + 1))
+                windowadmin.ui_admin.label_t_name.setText("Fill")
+
 
 
 

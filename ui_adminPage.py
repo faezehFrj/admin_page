@@ -342,25 +342,18 @@ class Ui_MainWindowAdmin(object):
         icon1.addFile(u":/fingerprint.png", QSize(), QIcon.Normal, QIcon.Off)
         self.pushButton_save_finger.setIcon(icon1)
         self.pushButton_save_finger.setIconSize(QSize(99, 96))
+
+
+
         self.checkBox_active = QCheckBox(self.frame_features_one_employee)
         self.checkBox_active.setObjectName(u"checkBox_active")
         self.checkBox_active.setGeometry(QRect(440, 20, 51, 31))
-        self.checkBox_active.setStyleSheet(u"QCheckBox {\n"
-                                           "    spacing: 5px;\n"
-                                           "}\n"
-                                           "\n"
-                                           "QCheckBox::indicator {\n"
-                                           "    width: 40px;\n"
-                                           "    height: 35px;\n"
-                                           "}\n"
-                                           "\n"
-                                           "QCheckBox::indicator:unchecked {\n"
-                                           "    image: url(:/switch_able.png)\n"
-                                           "}\n"
-                                           "\n"
-                                           "QCheckBox::indicator:checked {\n"
-                                           "    image: url(:/switch_disable.png)\n"
-                                           "}")
+        self.checkBox_active.setStyleSheet(u"QCheckBox {spacing: 5px;}\n"
+                      "QCheckBox::indicator { width: 40px;height: 35px;}\n"
+                      "QCheckBox::indicator:unchecked {image: url(:/switch_able.png)}\n"
+                      "QCheckBox::indicator:checked {image: url(:/switch_disable.png)}")
+
+
         ########first page###############3
 
         # self.fram_first_time = QFrame(self.centralwidget)
@@ -391,10 +384,10 @@ class Ui_MainWindowAdmin(object):
         self.label_erro_fill.setStyleSheet(u"\n"
                                            "color: rgb(255, 255, 127);")
 
-        self.label_4 = QLabel(self.frame_features_one_employee)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setGeometry(QRect(400, 20, 51, 31))
-        self.label_4.setStyleSheet(u"color: rgb(0, 173, 239);")
+        self.label_activeOrDi = QLabel(self.frame_features_one_employee)
+        self.label_activeOrDi.setObjectName(u"label_activeOrDi")
+        self.label_activeOrDi.setGeometry(QRect(380, 20, 51, 31))
+        self.label_activeOrDi.setStyleSheet(u"color: rgb(0, 173, 239);")
         self.pushButton_export = QPushButton(self.frame_features_one_employee)
         self.pushButton_export.setObjectName(u"pushButton_export")
         self.pushButton_export.setGeometry(QRect(490, 20, 51, 41))
@@ -513,7 +506,7 @@ class Ui_MainWindowAdmin(object):
         self.pushButton_save.setText(QCoreApplication.translate("MainWindow", u"save", None))
         self.pushButton_save_finger.setText("")
         self.checkBox_active.setText("")
-        self.label_4.setText(QCoreApplication.translate("MainWindow", u"active", None))
+        self.label_activeOrDi.setText(QCoreApplication.translate("MainWindow", u"active", None))
         self.pushButton_export.setText("")
         self.image_admin.setText("")
         self.label_erro_fill.setText("")

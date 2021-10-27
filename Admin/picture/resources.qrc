@@ -15,5 +15,6 @@
 		<file>rsz_arash_golsaz.png</file>
 		<file>back.png</file>
 		<file>finger_max.png</file>
+		<file>icon_exit.png</file>
     </qresource>
 </RCC>

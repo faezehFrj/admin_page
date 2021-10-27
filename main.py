@@ -19,6 +19,7 @@ import jdatetime
 from uiCreateExport import Ui_MainCreateExport
 from exportToExcel import ExportToExcel
 from uiFingerprintPage import Ui_MainWindowFingerprint
+from uiPassword import  Ui_MainWindowPassword
 
 
 # import Mqtt
@@ -68,6 +69,25 @@ class MainWindowAdmin(QMainWindow):
         self.ui_admin.employee7.clicked.connect(lambda: self.show_features_employee(6))
         self.ui_admin.employee8.clicked.connect(lambda: self.show_features_employee(7))
 
+        self.ui_admin.checkBox_active.stateChanged.connect(lambda: self.change())
+
+
+
+    def change(self):
+
+        if self.ui_admin.checkBox_active.isChecked()==True:
+            db.update_status_employee("0",self.id_employee_select)
+            self.ui_admin.label_activeOrDi.setText("diactive")
+            self.ui_admin.label_activeOrDi.setStyleSheet(u"color: rgb(127, 132, 137);")
+            print("diactive")
+        else:
+            print("active")
+            db.update_status_employee("1", self.id_employee_select)
+            self.ui_admin.label_activeOrDi.setText("active")
+            self.ui_admin.label_activeOrDi.setStyleSheet(u"color: rgb(0, 173, 239);")
+
+        self.update_list_employee()
+
     def show_features_employee(self, id_employee_choose):
         # print(id_employee_choose)
         self.ui_admin.fram_after_add.hide()
@@ -80,6 +100,10 @@ class MainWindowAdmin(QMainWindow):
         self.ui_admin.label_RFID.setText(QCoreApplication.translate("MainWindow", rfid, None))
         self.ui_admin.label_t_name.setText(name)
         self.ui_admin.label_2.setText("Features")
+        self.ui_admin.pushButton_export.show()
+        self.ui_admin.checkBox_active.show()
+        self.ui_admin.label_activeOrDi.show()
+        self.ui_admin.pushButton_save_finger.show()
 
         # show alarm bellow finger print
         if self.epmloyees[id_employee_choose][6] == "0":
@@ -97,6 +121,13 @@ class MainWindowAdmin(QMainWindow):
         self.set_rfid_select_employee(self.epmloyees[id_employee_choose][1])
         self.number_id_fingerprint_save = self.epmloyees[id_employee_choose][6]
         # self.ui_admin.label_message_number_fingerprint.setText(self.epmloyees[id_employee_choose][4])
+
+
+        #show acitive and diactive
+        if self.epmloyees[id_employee_choose][7] == "1":
+            self.ui_admin.checkBox_active.setChecked(False)
+        else:
+            self.ui_admin.checkBox_active.setChecked(True)
 
     ####show employeee
     def show_button_employee(self):
@@ -356,6 +387,20 @@ class AlarmSaveEmployee(QMainWindow):
         self.ui_alarm_save = Ui_MainWindow_alarm_save()
         self.ui_alarm_save.setupUi(self)
         self.setWindowFlag(Qt.FramelessWindowHint)
+
+
+class PasswordCheck(QMainWindow):
+    def __init__(self):
+        QMainWindow.__init__(self)
+        self.ui_pass = Ui_MainWindowPassword()
+        self.ui_pass.setupUi(self)
+        self.setWindowFlag(Qt.FramelessWindowHint)
+
+
+
+
+
+
 
 
 if __name__ == "__main__":

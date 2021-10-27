@@ -525,3 +525,8 @@ class Ui_MainWindow(object):
                                   QIcon.Off)
             self.icon_light_off.addFile(u"D:/V2.0.0/Programme/qt/UI design/picture/btLampOff.png", QSize(), QIcon.Normal,
                                    QIcon.Off)
+
+
+
+    #----------------------bular
+

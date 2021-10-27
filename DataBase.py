@@ -80,13 +80,13 @@ def select_all_employee(conn):
     cur.execute("SELECT * FROM employeeTable")
 
     rows = cur.fetchall()
-
-    for row in rows:
-        print(row)
+    #
+    # for row in rows:
+    #     print(row)
 
     return rows
 
-
+#----change it to give all employee who are status 1
 def select_task_by_priority(conn, idCard):
     """
     Query tasks by priority
@@ -95,7 +95,7 @@ def select_task_by_priority(conn, idCard):
     :return:
     """
     cur = conn.cursor()
-    cur.execute("SELECT * FROM employeeTable WHERE idCard=?", (idCard,))
+    cur.execute("SELECT * FROM employeeTable WHERE idCard=? and status = '1'", (idCard,))
 
     rows = cur.fetchall()
     return rows
@@ -453,7 +453,25 @@ def update_number_status_finger(userID,number):
     #     if sqliteConnection:
     #         sqliteConnection.close()
     #         print("The SQLite connection is closed")
-# if __name__ == '__main__':
+
+def update_status_employee(status,userID):
+    try:
+        sqliteConnection = sqlite3.connect(dataBase_path)
+        cursor = sqliteConnection.cursor()
+        print("Connected to SQLite")
+        sql_update_query = """Update employeeTable set status=?  WHERE  userID = ?"""
+        cursor.execute(sql_update_query, (status,userID,))
+        # cursor.execute(sql_update_query)
+        sqliteConnection.commit()
+        print("Record Updated successfully ")
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to update sqlite table", error)
+
+
+if __name__ == '__main__':
+    update_status_employee("0",1)
 #     select_return_id("aaa")
 #     r=selectEmployeeAndTimeIN(2)
 #     print(r[0][0])

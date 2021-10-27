@@ -946,6 +946,40 @@ border-radius: 40px;</string>
      <string/>
     </property>
    </widget>
+   <widget class="QLabel" name="label_fix_icon_exit">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>430</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="../picture/resources.qrc">:/icon_exit.png</pixmap>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Exit">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>427</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-radius: 30px;
+color: rgb(255, 255, 255);
+font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Exite</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources>

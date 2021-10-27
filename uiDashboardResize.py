@@ -486,3 +486,13 @@ class Ui_MainWindow(object):
             icon_power.addFile(u":/Dry_power.png", QSize(), QIcon.Normal, QIcon.Off)
             self.button_power.setIcon(icon_power)
 
+
+    def blur(self,mount):
+        # creating a blur effect
+        self.blur_effect = QGraphicsBlurEffect()
+
+        # setting blur radius
+        self.blur_effect.setBlurRadius(mount)
+
+        # adding blur effect to the label
+        self.centralwidget.setGraphicsEffect(self.blur_effect)
