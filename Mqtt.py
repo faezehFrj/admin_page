@@ -407,11 +407,18 @@ def show_sure_delete():
     windowDelete.show()
 
 def delete_employee():
-    window.array_employee.pop(windowadmin.id_employee_select)
+
     windowadmin.ui_admin.blur(0)
     windowDelete.hide()
     windowadmin.delete_employee_select()
+    clearLayout(window.ui.frame_employees.layout())
+    window.show_employee()
 
+def clearLayout(layout):
+  while layout.count():
+    child = layout.takeAt(0)
+    if child.widget():
+      child.widget().deleteLater()
 
 
 def cancel_delete_employee():
@@ -497,6 +504,8 @@ def back_dashboard():
     window.show()
     windowPassword.hide()
     window.ui.blur(0)
+
+
 
 
 
@@ -600,6 +609,8 @@ def the_button_was_clicked8():
 def go_to_admin_page():
     window.hide()
     windowadmin.show()
+    windowadmin.ui_admin.fram_after_add.show()
+    windowadmin.ui_admin.frame_features_one_employee.hide()
 
 
 def create_new_employee():
@@ -610,6 +621,7 @@ def create_new_employee():
         windowadmin.ui_admin.frame_features_one_employee.show()
         windowadmin.ui_admin.fram_after_add.hide()
 
+
         windowadmin.ui_admin.lineEdit_fname.setText(QCoreApplication.translate("MainWindow", "", None))
         windowadmin.ui_admin.lineEdit_Lname.setText(QCoreApplication.translate("MainWindow", "", None))
         windowadmin.ui_admin.label_RFID.setText(QCoreApplication.translate("MainWindow", "", None))
@@ -617,6 +629,7 @@ def create_new_employee():
         windowadmin.ui_admin.checkBox_active.hide()
         windowadmin.ui_admin.label_activeOrDi.hide()
         windowadmin.ui_admin.pushButton_save_finger.hide()
+        windowadmin.ui_admin.delete_employee.hide()
         windowadmin.ui_admin.label_t_name.setText("Fill")
 
         id_fingerprint = db.select_number_fingerprint_id()

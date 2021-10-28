@@ -238,6 +238,7 @@ class Ui_MainWindow(object):
         self.frame_employees.setGeometry(QRect(10, 430, 231, 361))
         self.frame_employees.setFrameShape(QFrame.StyledPanel)
         self.frame_employees.setFrameShadow(QFrame.Raised)
+        self.parent_employee=self.frame_employees.parent()
         #         self.frame_eployee = QFrame(self.frame_employees)
         #         self.frame_eployee.setObjectName(u"frame_eployee")
         #         self.frame_eployee.setGeometry(QRect(-10, 20, 241, 39))
@@ -399,6 +400,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+
 
         MainWindow.setCentralWidget(self.centralwidget)
 

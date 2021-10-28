@@ -116,6 +116,7 @@ class MainWindowAdmin(QMainWindow):
         self.id_employee_for_delete=id_employee_choose
         #print(id_employee_choose)
         self.ui_admin.fram_after_add.hide()
+        self.ui_admin.delete_employee.show()
         self.ui_admin.frame_features_one_employee.show()
         name = self.epmloyees[id_employee_choose][2]
         family = self.epmloyees[id_employee_choose][3]
@@ -312,6 +313,8 @@ class MainWindow(QMainWindow):
 
     def show_employee(self):
         self.records = db.getAllEmployeeAndTime()
+
+
 
         for row in self.records:
             p = Person(row[1], self.ui.frame_employees)

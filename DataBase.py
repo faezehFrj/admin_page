@@ -480,9 +480,9 @@ def delete_employee(userID):
     cursor.close()
 
 
-if __name__ == '__main__':
-    update_status_employee("0",1)
-#     select_return_id("aaa")
+#if __name__ == '__main__':
+    # update_status_employee("0",1)
+    # select_return_id("aaa")
 #     r=selectEmployeeAndTimeIN(2)
 #     print(r[0][0])
 
