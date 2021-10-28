@@ -447,15 +447,30 @@ class Ui_MainWindowAdmin(object):
         self.labe_text_finish_employee.setStyleSheet(u"color: rgb(0, 173, 238);\n"
                                                      "font: 75 14pt \"MS Shell Dlg 2\";")
 
-        # beller
+        self.label_fix_icon_exit = QLabel(self.centralwidget)
+        self.label_fix_icon_exit.setObjectName(u"label_fix_icon_exit")
+        self.label_fix_icon_exit.setGeometry(QRect(20, 430, 31, 31))
+        self.label_fix_icon_exit.setPixmap(QPixmap(u":/icon_exit.png"))
+        self.pushButton_Exit = QPushButton(self.centralwidget)
+        self.pushButton_Exit.setObjectName(u"pushButton_Exit")
+        self.pushButton_Exit.setGeometry(QRect(50, 427, 101, 31))
+        self.pushButton_Exit.setStyleSheet(u"border-radius: 30px;\n"
+                                           "color: rgb(255, 255, 255);\n"
+                                           "font: 10pt \"MS Shell Dlg 2\";")
 
-        #         self.frame_beller = QFrame(self.centralwidget)
-        #         self.frame_beller.setObjectName(u"frame_beller")
-        #         self.frame_beller.setGeometry(QRect(0, 0, 1280, 800))
-        #         self.frame_beller.setStyleSheet(u"background: rgba(39, 74, 89,0.6);\n"
-        # "")
-        #         self.frame_beller.setFrameShape(QFrame.StyledPanel)
-        #         self.frame_beller.setFrameShadow(QFrame.Raised)
+        self.delete_employee = QPushButton(self.frame_features_one_employee)
+        self.delete_employee.setObjectName(u"delete_employee")
+        self.delete_employee.setGeometry(QRect(20, 660, 61, 41))
+        self.delete_employee.setStyleSheet(u"\n"
+                                           "\n"
+                                           "background-color:\n"
+                                           "qlineargradient(spread:pad, x1:0.487, y1:0, x2:0.516, y2:1, stop:0 rgba(42, 64, 74, 0.6), stop:1 rgba(42, 64, 74, 0.264));\n"
+                                           "border-radius: 13px;\n"
+                                           "color:rgb(255, 255, 255)\n"
+                                           "\n"
+                                           "")
+
+
 
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -517,6 +532,11 @@ class Ui_MainWindowAdmin(object):
         self.label_text_first_2.setText(QCoreApplication.translate("MainWindow", u"select any employee", None))
         self.labe_text_finish_employee.setText(
             QCoreApplication.translate("MainWindow", u"please select any employee", None))
+
+        self.label_fix_icon_exit.setText("")
+        self.pushButton_Exit.setText(QCoreApplication.translate("MainWindow", u"Exite", None))
+        self.delete_employee.setText(QCoreApplication.translate("MainWindow", u"delete", None))
+
 
         self.employee1.hide()
         self.employee2.hide()

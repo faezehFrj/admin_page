@@ -20,6 +20,7 @@ from uiCreateExport import Ui_MainCreateExport
 from exportToExcel import ExportToExcel
 from uiFingerprintPage import Ui_MainWindowFingerprint
 from uiPassword import  Ui_MainWindowPassword
+from uiDeleteEmployee import Ui_MainWindowDeleteAlarm
 
 
 # import Mqtt
@@ -71,6 +72,26 @@ class MainWindowAdmin(QMainWindow):
 
         self.ui_admin.checkBox_active.stateChanged.connect(lambda: self.change())
 
+        # self.ui_admin.delete_employee.clicked.connect(self.delete_employee_select)
+
+
+    #---------delete employee---------------
+
+    def delete_employee_select(self):
+
+        db.delete_employee(self.id_employee_select)
+        # hide_frams
+        for i in range(8):
+            print(i)
+            self.frams[i].hide()
+        self.show_button_employee()
+        self.ui_admin.frame_features_one_employee.hide()
+        self.ui_admin.fram_after_add.show()
+
+
+
+
+
 
 
     def change(self):
@@ -89,7 +110,11 @@ class MainWindowAdmin(QMainWindow):
         self.update_list_employee()
 
     def show_features_employee(self, id_employee_choose):
-        # print(id_employee_choose)
+
+        #---------set id fram -----
+
+        self.id_employee_for_delete=id_employee_choose
+        #print(id_employee_choose)
         self.ui_admin.fram_after_add.hide()
         self.ui_admin.frame_features_one_employee.show()
         name = self.epmloyees[id_employee_choose][2]
@@ -131,19 +156,19 @@ class MainWindowAdmin(QMainWindow):
 
     ####show employeee
     def show_button_employee(self):
+
         self.show_detail_employee = []
-        frams = self.ui_admin.add_framEmployee_array()
+        self.frams = self.ui_admin.add_framEmployee_array()
         epmloyees = db.main_select_all_employee()
-        # for i in a:
-        #     print(i)
-        # a[1].show()
+
+
         for j in range(len(epmloyees)):
             array = []
-            frams[j].show()
+            self.frams[j].show()
             temp = epmloyees[j][2] + "\n" + epmloyees[j][3]
-            frams[j].setText(temp)
+            self.frams[j].setText(temp)
             array.append(epmloyees[j][0])
-            array.append(frams[j])
+            array.append(self.frams[j])
             self.show_detail_employee.append(array)
 
     def set_id(self, id_person):
@@ -316,6 +341,7 @@ class MainWindow(QMainWindow):
         # for row in range(len(self.array_employee)):
         #     print(self.array_employee[row][1])
 
+
     def get_list_employee(self):
         return self.array_employee
 
@@ -396,7 +422,12 @@ class PasswordCheck(QMainWindow):
         self.ui_pass.setupUi(self)
         self.setWindowFlag(Qt.FramelessWindowHint)
 
-
+class DeleteEmployee(QMainWindow):
+    def __init__(self):
+        QMainWindow.__init__(self)
+        self.ui_delete = Ui_MainWindowDeleteAlarm()
+        self.ui_delete.setupUi(self)
+        self.setWindowFlag(Qt.FramelessWindowHint)
 
 
 

@@ -469,6 +469,16 @@ def update_status_employee(status,userID):
     except sqlite3.Error as error:
         print("Failed to update sqlite table", error)
 
+def delete_employee(userID):
+
+    sqliteConnection = sqlite3.connect(dataBase_path)
+    cursor = sqliteConnection.cursor()
+    sqlite_select_query = """DELETE from employeeTable Where userID = ?"""
+    cursor.execute(sqlite_select_query, (userID,))
+    sqliteConnection.commit()
+    print("Record deleted successfully")
+    cursor.close()
+
 
 if __name__ == '__main__':
     update_status_employee("0",1)

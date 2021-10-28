@@ -928,6 +928,29 @@ QCheckBox::indicator:checked {
       </size>
      </property>
     </widget>
+    <widget class="QPushButton" name="delete_employee">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>660</y>
+       <width>61</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+
+background-color:
+qlineargradient(spread:pad, x1:0.487, y1:0, x2:0.516, y2:1, stop:0 rgba(42, 64, 74, 0.6), stop:1 rgba(42, 64, 74, 0.264));
+border-radius: 13px;
+color:rgb(255, 255, 255)
+
+</string>
+     </property>
+     <property name="text">
+      <string>delete</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QLabel" name="image_admin">
     <property name="geometry">

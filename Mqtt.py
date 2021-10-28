@@ -35,6 +35,7 @@ windowAlarmEmployee = ui.AlarmSaveEmployee()
 windowExport=ui.MainCreateExport()
 windowFingerPrint=ui.MainWindowFingerprint()
 windowPassword=ui.PasswordCheck()
+windowDelete=ui.DeleteEmployee()
 window.showNowTime()
 window.show_employee()
 
@@ -360,7 +361,7 @@ def configmqtt():
 def get_clientvalue():
     return client
 
-
+#----action button----------
 def function_button():
     window.ui.change_icon_lamp()
     window.ui.button_lamp1.clicked.connect(the_button_was_clicked1)
@@ -389,6 +390,36 @@ def function_button():
 
     windowPassword.ui_pass.pushButton_cancel_pass.clicked.connect(back_dashboard)
     windowPassword.ui_pass.pushButton_check_pass.clicked.connect(varify_password)
+
+    #-----close project
+    windowadmin.ui_admin.pushButton_Exit.clicked.connect(close_project)
+
+    #----alarm delete employee-----
+    windowadmin.ui_admin.delete_employee.clicked.connect(show_sure_delete)
+    windowDelete.ui_delete.pushButton_okey_delete.clicked.connect(delete_employee)
+    windowDelete.ui_delete.pushButton_okey_delete.clicked.connect(cancel_delete_employee)
+
+
+
+#------delete employee--------
+def show_sure_delete():
+    windowadmin.ui_admin.blur(2)
+    windowDelete.show()
+
+def delete_employee():
+    window.array_employee.pop(windowadmin.id_employee_select)
+    windowadmin.ui_admin.blur(0)
+    windowDelete.hide()
+    windowadmin.delete_employee_select()
+
+
+
+def cancel_delete_employee():
+    windowadmin.ui_admin.blur(0)
+    windowDelete.hide()
+#---------close_project methode----------
+def close_project():
+    windowadmin.hide()
 
 
 #-------------varify password--------
