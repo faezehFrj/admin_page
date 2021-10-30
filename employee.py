@@ -71,8 +71,8 @@ class Person():
 
         self.label_fix_logo_user.setText("")
         self.label_name_employee.setText(QCoreApplication.translate("MainWindow", self.name, None))
-        self.label_tim_login.setText(QCoreApplication.translate("MainWindow", u"08:00", None))
-        self.label_time_logOut.setText(QCoreApplication.translate("MainWindow", u"08:00", None))
+        self.label_tim_login.setText(QCoreApplication.translate("MainWindow", u"__:__", None))
+        self.label_time_logOut.setText(QCoreApplication.translate("MainWindow", u"__:__", None))
 
         return self.frame_eployee
 

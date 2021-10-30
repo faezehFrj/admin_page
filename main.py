@@ -295,14 +295,31 @@ class MainWindow(QMainWindow):
         self.ui.label_13.setText(QCoreApplication.translate("MainWindow", monthDisplay, None))
         self.ui.label_day.setText(QCoreApplication.translate("MainWindow", dayDisplay, None))
 
+
         if self.today < datetime.today().date():
             self.today = datetime.today().date()
+
+        if hourDisplay == "00":
+            for person in self.array_employee:
+
+                person[1].label_tim_login.setStyleSheet(u"color: rgb(127, 132, 137);\n"
+                                                "font: 25 9pt \"Segoe UI Light\";")
+                person[1].label_time_logOut.setStyleSheet(u"color: rgb(127, 132, 137);\n"
+                                                    "font: 25 9pt \"Segoe UI Light\";")
+                person[1].label_name_employee.setStyleSheet(u"color:  rgb(127, 132, 137);\n"
+                                                    "font: 25 9pt \"Segoe UI Light\";")
+                person[1].label_tim_login.setText("--:--")
+                person[1].label_time_logOut.setText("--:--")
+
+
+
 
     def the_button_was_clicked1(self):
         print("ddd")
         p = Person("faezeh farajzade", self.ui.frame_employees)
         self.ui.verticalLayout.addWidget(p.config())
         self.array_employee.append(p)
+
 
     # ----------show admin page---------------
     # def go_to_admin_page(self):
@@ -370,8 +387,10 @@ class MainWindow(QMainWindow):
 
         styleSheet = """
             border-radius:90px;
-            background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90, stop:0.749 rgba(255, 85, 255, 0), stop:0.75 rgba(253, 54, 11, 80));
+            background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90, stop: {stop_1} rgba(255, 85, 255, 0), stop: {stop_2} rgba(253, 54, 11, 80));
         """
+
+
 
         progress = (100 - value) / 100.0
 
@@ -390,7 +409,7 @@ class MainWindow(QMainWindow):
 
         styleSheet = """
          border-radius:90px;
-        background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90, stop:0.749 rgba(255, 85, 255, 0), stop:0.75 rgba(115, 161, 206, 255));
+        background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90, stop:{STOP_1} rgba(255, 85, 255, 0), stop:{STOP_2} rgba(115, 161, 206, 255));
 
         """
 

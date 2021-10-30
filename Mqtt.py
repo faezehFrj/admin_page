@@ -4,15 +4,9 @@ import DataBase as db
 import time
 import threading
 import main as ui
-from PySide2.QtGui import QIcon
-from PySide2.QtCore import QSize, QCoreApplication
+from PySide2.QtCore import  QCoreApplication
 import jdatetime
 from employee import Person as new_Person
-
-
-from PyQt5.QtWidgets import *
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 import sys
@@ -26,6 +20,7 @@ myGlobalMessagePayload = ''  # HERE!
 state_rfid = 0  # baraye in ke bebinim mikhad fard jadid  tarif kone ya in ke mikhad haminjor biyad to
 id_rfid_employee = 0
 buttonClicked = 0
+button_touch=0
 status_crete_employee = 0
 statusLamp = [0, 0, 0, 0, 0, 0, 0, 0,0]
 app = ui.QApplication(ui.sys.argv)
@@ -36,8 +31,9 @@ windowExport=ui.MainCreateExport()
 windowFingerPrint=ui.MainWindowFingerprint()
 windowPassword=ui.PasswordCheck()
 windowDelete=ui.DeleteEmployee()
-window.showNowTime()
 window.show_employee()
+window.showNowTime()
+
 
 
 
@@ -96,7 +92,7 @@ def get_payload():
 
 #####subscribe######
 def subscribe_all_topic(topic_subscrib, mesege):
-    global buttonClicked, set_time, t
+    global buttonClicked, set_time, t,button_touch
     set_time = setTimer(5)
     set_time.cancel()
 
@@ -112,8 +108,8 @@ def subscribe_all_topic(topic_subscrib, mesege):
         else:
             detrmineStatusButton(resultDB)
 
-        # if status_crete_employee == 1:
-        windowadmin.ui_admin.label_RFID.setText(id_rfid_employee)
+        if status_crete_employee == 1:
+            windowadmin.ui_admin.label_RFID.setText(id_rfid_employee)
 
 
 
@@ -179,6 +175,7 @@ def subscribe_all_topic(topic_subscrib, mesege):
 
     if "button/click" == topic_subscrib:
         t = setTimer(10)
+        button_touch=1
 
         if buttonClicked == 1:
             t.cancel()
@@ -204,6 +201,14 @@ def subscribe_all_topic(topic_subscrib, mesege):
     ####------------------------ring button----------------------------------------#####
     ####------------------------timer --------------------------------------------####
 
+    ####-------------------------temp- and-  humi------------------------------------------##
+
+    elif "temp" == topic_subscrib:
+        window.tempratureBarValue(int(mesege))
+
+
+    elif "humi" == topic_subscrib:
+        window.humidBarValue(int(mesege))
 
 # ********************************publish********************************************#
 
@@ -252,68 +257,96 @@ def detrmineStatusButton(resultDB):
     today = jdatetime.datetime.now().strftime("%Y-%m-%d")
     current_time = now.strftime("%H:%M")
     print(buttonClicked)
-    if buttonClicked == 1:
+    if button_touch==1:
+        if buttonClicked == 1:
+            publish(client, "", "open/door")
+            publish(client, "state/openDoor/access", "state")
+
+
+        # ****login****#
+        elif buttonClicked == 2:
+            ####save login in data base####
+            db.mainCreateLog(today, current_time, '', resultDB[0][1])
+            array = window.get_list_employee()
+            for rows in range(len(array)):
+                if resultDB[0][0] == array[rows][0]:
+                    person = array[rows][1]
+                    # break
+                    person.label_tim_login.setStyleSheet(u"color: rgb(255, 255, 255);\n"
+                                                         "font: 25 9pt \"Segoe UI Light\";")
+                    person.label_name_employee.setStyleSheet(u"color: rgb(255, 255, 255);\n"
+                                                             "font: 25 9pt \"Segoe UI Light\";")
+                    person.label_tim_login.setText(current_time)
+                    print("click")
+            ####set ui log in and log out
+            # window.ui.
+
+            #### show in oled ####
+
+            publish(client, resultDB[0][2], "information/employee/name")
+            publish(client, current_time, "information/employee/time")
+            publish(client, "state/openDoor/ok", "state")
+
+
+
+
+        # ****logout****#
+        elif buttonClicked == 0:
+            set_time.start()
+            ####save logout in data base####
+            db.updateLogTable(current_time, resultDB[0][1])
+            ####show oled #####
+            publish(client, resultDB[0][2], "information/employee/name")
+            publish(client, current_time, "information/employee/time")
+            publish(client, "state/openDoor/ok", "state")
+
+            array = window.get_list_employee()
+            for rows in range(len(array)):
+                if resultDB[0][0] == array[rows][0]:
+                    person = array[rows][1]
+                    # break
+                    person.label_time_logOut.setStyleSheet(u"color: rgb(121, 121, 121);\n"
+                                                           "font: 25 10pt \"Segoe UI Light\";")
+                    person.label_tim_login.setStyleSheet(u"color: rgb(121, 121, 121);\n"
+                                                         "font: 25 10pt \"Segoe UI Light\";")
+                    person.label_name_employee.setStyleSheet(u"color: rgb(121, 121, 121);\n"
+                                                             "font: 25 10pt \"Segoe UI Light\";")
+                    person.label_time_logOut.setText(current_time)
+
+    else:
         publish(client, "", "open/door")
         publish(client, "state/openDoor/access", "state")
 
+        #show last enter
 
-    # ****login****#
-    elif buttonClicked == 2:
-        ####save login in data base####
-        db.mainCreateLog(today, current_time, '', resultDB[0][1])
-        array = window.get_list_employee()
-        for rows in range(len(array)):
-            if resultDB[0][0] == array[rows][0]:
-                person = array[rows][1]
-                # break
-                person.label_tim_login.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-                                                     "font: 25 9pt \"Segoe UI Light\";")
-                person.label_name_employee.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-                                                         "font: 25 9pt \"Segoe UI Light\";")
-                person.label_tim_login.setText(current_time)
-                print("click")
-        ####set ui log in and log out
-        # window.ui.
-
-        #### show in oled ####
-
-        publish(client, resultDB[0][2], "information/employee/name")
-        publish(client, current_time, "information/employee/time")
-        publish(client, "state/openDoor/ok", "state")
-
-
-
-
-    # ****logout****#
-    elif buttonClicked == 0:
-        set_time.start()
-        ####save logout in data base####
-        db.updateLogTable(current_time, resultDB[0][1])
-        ####show oled #####
-        publish(client, resultDB[0][2], "information/employee/name")
-        publish(client, current_time, "information/employee/time")
-        publish(client, "state/openDoor/ok", "state")
-
-        array = window.get_list_employee()
-        for rows in range(len(array)):
-            if resultDB[0][0] == array[rows][0]:
-                person = array[rows][1]
-                # break
-                person.label_time_logOut.setStyleSheet(u"color: rgb(121, 121, 121);\n"
-                                                       "font: 25 10pt \"Segoe UI Light\";")
-                person.label_tim_login.setStyleSheet(u"color: rgb(121, 121, 121);\n"
-                                                     "font: 25 10pt \"Segoe UI Light\";")
-                person.label_name_employee.setStyleSheet(u"color: rgb(121, 121, 121);\n"
-                                                         "font: 25 10pt \"Segoe UI Light\";")
-                person.label_time_logOut.setText(current_time)
-
+        # set_time.start()
+        # ####save logout in data base####
+        # db.updateLogTable(current_time, resultDB[0][1])
+        # ####show oled #####
+        # publish(client, resultDB[0][2], "information/employee/name")
+        # publish(client, current_time, "information/employee/time")
+        # publish(client, "state/openDoor/ok", "state")
+        #
+        # array = window.get_list_employee()
+        # for rows in range(len(array)):
+        #     if resultDB[0][0] == array[rows][0]:
+        #         person = array[rows][1]
+        #         # break
+        #         person.label_time_logOut.setStyleSheet(u"color: rgb(121, 121, 121);\n"
+        #                                                "font: 25 10pt \"Segoe UI Light\";")
+        #         person.label_tim_login.setStyleSheet(u"color: rgb(121, 121, 121);\n"
+        #                                              "font: 25 10pt \"Segoe UI Light\";")
+        #         person.label_name_employee.setStyleSheet(u"color: rgb(121, 121, 121);\n"
+        #                                                  "font: 25 10pt \"Segoe UI Light\";")
+        #         person.label_time_logOut.setText(current_time)
 
 # ------------------normal status----------------#
 def resetFactory():
-    global buttonClicked
+    global buttonClicked,button_touch
     publish(client, "state/normal", "state")
     publish(client, "state/fingerprint/stop", "state/fingerprint")
     buttonClicked = 0
+    button_touch = 0
     t.cancel()
     set_time.cancel()
 
@@ -342,6 +375,8 @@ def configmqtt():
     client.subscribe("enroll/RemoveFinger")
     client.subscribe("enroll/store")
     client.subscribe("search/find")
+    client.subscribe("temp")
+    client.subscribe("humi")
 
     # time.sleep(1)
     while Connected != True:  # Wait for connection
@@ -397,7 +432,7 @@ def function_button():
     #----alarm delete employee-----
     windowadmin.ui_admin.delete_employee.clicked.connect(show_sure_delete)
     windowDelete.ui_delete.pushButton_okey_delete.clicked.connect(delete_employee)
-    windowDelete.ui_delete.pushButton_okey_delete.clicked.connect(cancel_delete_employee)
+    windowDelete.ui_delete.pushButton_cancel_delete.clicked.connect(cancel_delete_employee)
 
 
 
@@ -427,6 +462,7 @@ def cancel_delete_employee():
 #---------close_project methode----------
 def close_project():
     windowadmin.hide()
+    ui.sys.exit(app.exec_())
 
 
 #-------------varify password--------
