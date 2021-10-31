@@ -70,7 +70,7 @@ class MainWindowAdmin(QMainWindow):
         self.ui_admin.employee7.clicked.connect(lambda: self.show_features_employee(6))
         self.ui_admin.employee8.clicked.connect(lambda: self.show_features_employee(7))
 
-        self.ui_admin.checkBox_active.stateChanged.connect(lambda: self.change())
+        # self.ui_admin.checkBox_active.stateChanged.connect(lambda: self.change())
 
         # self.ui_admin.delete_employee.clicked.connect(self.delete_employee_select)
 
@@ -416,7 +416,8 @@ class MainWindow(QMainWindow):
         progress = (100 - value) / 100.0
 
         # get new value
-        stop_1 = str(progress - 0.001)
+        temp=progress - 0.001
+        stop_1 = str(temp)
         stop_2 = str(progress)
 
         # replace
@@ -427,6 +428,8 @@ class MainWindow(QMainWindow):
         self.ui.circularProgressH.setStyleSheet(styleSheetNew)
 
         self.ui.label_humidity.setText(QCoreApplication.translate("MainWindow", str(value), None))
+
+
 
 
 class AlarmSaveEmployee(QMainWindow):

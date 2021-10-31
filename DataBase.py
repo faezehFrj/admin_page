@@ -371,7 +371,7 @@ def create_export(userID,month):
 def getAllEmployeeAndTime():
     sqliteConnection = sqlite3.connect(dataBase_path)
     cursor = sqliteConnection.cursor()
-    sqlite_select_query = """SELECT userID,firsName,idCard from employeeTable"""
+    sqlite_select_query = """SELECT userID,firsName,idCard from employeeTable where status=='1'"""
     cursor.execute(sqlite_select_query)
     records = cursor.fetchall()
     return records
@@ -479,8 +479,7 @@ def delete_employee(userID):
     print("Record deleted successfully")
     cursor.close()
 
-
-#if __name__ == '__main__':
+if __name__ == '__main__':
     # update_status_employee("0",1)
     # select_return_id("aaa")
 #     r=selectEmployeeAndTimeIN(2)
@@ -490,8 +489,8 @@ def delete_employee(userID):
 #     # print(select_employee_by_fingerprint(3))
 #     # getAllEmployeeAndTime()
 #     # main_select_all_employee()
-     #mainCreateTable()
-    #mainCreatefingerprintID()
+    # mainCreateTable()
+    mainCreatefingerprintID()
 #     #print(select_number_fingerprint_id())
 #     # update_fingerprint_id(4)
 #     create_export(2)

@@ -204,11 +204,11 @@ def subscribe_all_topic(topic_subscrib, mesege):
     ####-------------------------temp- and-  humi------------------------------------------##
 
     elif "temp" == topic_subscrib:
-        window.tempratureBarValue(int(mesege))
+        window.tempratureBarValue(float(mesege))
 
 
     elif "humi" == topic_subscrib:
-        window.humidBarValue(int(mesege))
+        window.humidBarValue(float(mesege))
 
 # ********************************publish********************************************#
 
@@ -434,7 +434,18 @@ def function_button():
     windowDelete.ui_delete.pushButton_okey_delete.clicked.connect(delete_employee)
     windowDelete.ui_delete.pushButton_cancel_delete.clicked.connect(cancel_delete_employee)
 
+    #-----check box------------------
+    windowadmin.ui_admin.checkBox_active.stateChanged.connect(active_or_diactive_emloyee)
 
+
+
+
+
+#-------check box-----------
+def active_or_diactive_emloyee():
+    windowadmin.change()
+    clearLayout(window.ui.frame_employees.layout())
+    window.show_employee()
 
 #------delete employee--------
 def show_sure_delete():
