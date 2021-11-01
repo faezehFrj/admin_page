@@ -487,7 +487,7 @@ class Ui_MainWindowAdmin(object):
         self.icon_dashboard_3.setText("")
         self.pushButton_admin_employee.setText(QCoreApplication.translate("MainWindow", u"Employee", None))
         self.pushButton_Adashboard.setText(QCoreApplication.translate("MainWindow", u"Dashboard", None))
-        self.pushButton_Asetting.setText(QCoreApplication.translate("MainWindow", u"Settimg", None))
+        self.pushButton_Asetting.setText(QCoreApplication.translate("MainWindow", u"Settings", None))
         self.pushButton_5.setText("")
         self.employee1.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))
         self.employee2.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))
@@ -534,7 +534,7 @@ class Ui_MainWindowAdmin(object):
             QCoreApplication.translate("MainWindow", u"please select any employee", None))
 
         self.label_fix_icon_exit.setText("")
-        self.pushButton_Exit.setText(QCoreApplication.translate("MainWindow", u"Exite", None))
+        self.pushButton_Exit.setText(QCoreApplication.translate("MainWindow", u"Exit", None))
         self.delete_employee.setText(QCoreApplication.translate("MainWindow", u"delete", None))
 
 

@@ -8,11 +8,13 @@ from PySide2.QtCore import  QCoreApplication
 import jdatetime
 from employee import Person as new_Person
 from PyQt5.QtCore import *
+from PySide2.QtGui import QPixmap
+
 
 import sys
 
 Connected = False  # global variable for the state of the connection
-broker_address = "127.0.0.1"  # Broker address
+broker_address = "172.16.16.74"  # Broker address
 port = 1883  # Broker port
 user = "yourUser"  # Connection username
 password = "yourPassword"  # Connection password
@@ -23,7 +25,9 @@ buttonClicked = 0
 button_touch=0
 status_crete_employee = 0
 statusLamp = [0, 0, 0, 0, 0, 0, 0, 0,0]
+mqttClient.Client.connected_flag=False#create flag in class
 app = ui.QApplication(ui.sys.argv)
+
 window = ui.MainWindow()
 windowadmin = ui.MainWindowAdmin()
 windowAlarmEmployee = ui.AlarmSaveEmployee()
@@ -38,12 +42,13 @@ window.showNowTime()
 
 
 def on_connect(self, userdata, flags, rc):
+    global Connected  # Use global variable
     if rc == 0:
 
         print("Connected to broker")
-
-        global Connected  # Use global variable
         Connected = True  # Signal connection
+        client.connected_flag = True  # set flag
+        print(Connected)
 
     else:
 
@@ -356,15 +361,15 @@ def setTimer(second):
     reset_system = threading.Timer(second, resetFactory)
     return reset_system
 
-
 def configmqtt():
     global client
     client = mqttClient.Client("Python")  # create new instance
-    # client.username_pw_set(user, password=password)  # set username and password
     client.on_connect = on_connect  # attach function to callback
+    # client.username_pw_set(user, password=password)  # set username and password
     client.on_message = on_message  # attach function to callback
 
     client.connect(broker_address, port=port)  # connect to broker
+
 
     client.loop_start()  # start the loop
     client.subscribe("python/test")
@@ -378,24 +383,23 @@ def configmqtt():
     client.subscribe("temp")
     client.subscribe("humi")
 
-    # time.sleep(1)
-    while Connected != True:  # Wait for connection
-        time.sleep(0.1)
-        print("waite for connected")
+    time.sleep(1)
+    while not client.connected_flag:  # wait in loop
+        print("In wait loop")
+        time.sleep(1)
+        if client.connected_flag == False:
+            window.ui.label_wifi.setPixmap(QPixmap(u":/wifi.png"))
 
-    # try:
-    #         while True:
-    #             time.sleep(1)
-    #
-    # except KeyboardInterrupt:
-    #         print("exiting")
-    #         client.disconnect()
-    #         client.loop_stop()
+    if client.connected_flag==True:
+        window.ui.label_wifi.setPixmap(QPixmap(u":/mqtt_connect.png"))
+
+
+
+
 
 
 def get_clientvalue():
     return client
-
 #----action button----------
 def function_button():
     window.ui.change_icon_lamp()
