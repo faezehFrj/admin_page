@@ -49,6 +49,20 @@ def on_connect(self, userdata, flags, rc):
         Connected = True  # Signal connection
         client.connected_flag = True  # set flag
         print(Connected)
+        window.ui.label_wifi.setPixmap(QPixmap(u":/mqtt_connect.png"))
+
+
+        #subscrib
+        client.subscribe("python/test")
+        client.subscribe("publish/RFIDCode")
+        client.subscribe("button/click")
+        client.subscribe("enroll/getImage")
+        client.subscribe("enroll/convertToTemplate")
+        client.subscribe("enroll/RemoveFinger")
+        client.subscribe("enroll/store")
+        client.subscribe("search/find")
+        client.subscribe("temp")
+        client.subscribe("humi")
 
     else:
 
@@ -70,6 +84,10 @@ def on_message(client, userdata, msg):
     print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
     # return msg.payload.decode()
 
+def on_disconnect(client, userdata, rc):
+    if rc != 0:
+        print("Unexpected MQTT disconnection. Will auto-reconnect")
+        window.ui.label_wifi.setPixmap(QPixmap(u":/wifi.png"))
 
 def publish(client, m, topic_publish):
     msg_count = 0
@@ -364,34 +382,27 @@ def setTimer(second):
 def configmqtt():
     global client
     client = mqttClient.Client("Python")  # create new instance
-    client.on_connect = on_connect  # attach function to callback
-    # client.username_pw_set(user, password=password)  # set username and password
-    client.on_message = on_message  # attach function to callback
-
     client.connect(broker_address, port=port)  # connect to broker
 
 
+
+
+    client.on_connect = on_connect
+    client.on_message = on_message
+    client.on_disconnect = on_disconnect
     client.loop_start()  # start the loop
-    client.subscribe("python/test")
-    client.subscribe("publish/RFIDCode")
-    client.subscribe("button/click")
-    client.subscribe("enroll/getImage")
-    client.subscribe("enroll/convertToTemplate")
-    client.subscribe("enroll/RemoveFinger")
-    client.subscribe("enroll/store")
-    client.subscribe("search/find")
-    client.subscribe("temp")
-    client.subscribe("humi")
 
-    time.sleep(1)
-    while not client.connected_flag:  # wait in loop
-        print("In wait loop")
-        time.sleep(1)
-        if client.connected_flag == False:
-            window.ui.label_wifi.setPixmap(QPixmap(u":/wifi.png"))
 
-    if client.connected_flag==True:
-        window.ui.label_wifi.setPixmap(QPixmap(u":/mqtt_connect.png"))
+
+    # time.sleep(1)
+    # while not client.connected_flag:  # wait in loop
+    #     print("In wait loop")
+    #     time.sleep(1)
+    #     if client.connected_flag == False:
+    #
+    #
+    # if client.connected_flag==True:
+    #     window.ui.label_wifi.setPixmap(QPixmap(u":/mqtt_connect.png"))
 
 
 
