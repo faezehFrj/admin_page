@@ -1,6 +1,13 @@
 import sqlite3
 from sqlite3 import Error
+import os,sys
 from datetime import datetime
+
+dataBase_path = 'ArtaCompany.db'
+database = r"ArtaCompany.db"
+
+# def connectionToDatabase():
+
 
 
 def create_connection(db_file):
@@ -73,13 +80,13 @@ def select_all_employee(conn):
     cur.execute("SELECT * FROM employeeTable")
 
     rows = cur.fetchall()
-
-    for row in rows:
-        print(row)
+    #
+    # for row in rows:
+    #     print(row)
 
     return rows
 
-
+#----change it to give all employee who are status 1
 def select_task_by_priority(conn, idCard):
     """
     Query tasks by priority
@@ -88,17 +95,25 @@ def select_task_by_priority(conn, idCard):
     :return:
     """
     cur = conn.cursor()
-    cur.execute("SELECT * FROM employeeTable WHERE idCard=?", (idCard,))
+    cur.execute("SELECT * FROM employeeTable WHERE idCard=? and status = '1'", (idCard,))
 
     rows = cur.fetchall()
     return rows
 
+#******select employee by idcart and return id***********#
 
+def select_return_id(idCard):
+    sqliteConnection = sqlite3.connect(dataBase_path)
+    cursor = sqliteConnection.cursor()
+    sqlite_select_query = """SELECT userID  from employeeTable Where idCard = ?"""
+    cursor.execute(sqlite_select_query,(idCard,))
+    records = cursor.fetchall()
+    return records[0][0]
 # *****select employee by fingerprint id ******
 
 def select_employee_by_fingerprint(idFingerprint):
     try:
-        sqliteConnection = sqlite3.connect('D:\V2.0.0\Programme\qt\DB\ArtaDoor.db')
+        sqliteConnection = sqlite3.connect(dataBase_path)
         cursor = sqliteConnection.cursor()
         print("Connected to SQLite")
 
@@ -126,11 +141,12 @@ def delete_task(conn, userID):
     conn.commit()
 
 
+
 # *******update********
 
 def updateLogTable(timeOutput, idCard):
     try:
-        sqliteConnection = sqlite3.connect('D:\V2.0.0\Programme\qt\DB\ArtaDoor.db')
+        sqliteConnection = sqlite3.connect(dataBase_path)
         cursor = sqliteConnection.cursor()
         print("Connected to SQLite")
         sql_update_query = """Update logTable set timeOutput = ?  WHERE  idCard = ?   and (id=(SELECT MAX(id) FROM logTable))"""
@@ -152,7 +168,7 @@ def updateLogTable(timeOutput, idCard):
 # *******create table in db*******
 
 def mainCreateTable():
-    database = r"D:\V2.0.0\Programme\qt\DB\ArtaDoor.db"
+    # database = dataBase_path
 
     sql_create_projects_table = """ CREATE TABLE IF NOT EXISTS employeeTable (
                                         userID integer PRIMARY KEY AUTOINCREMENT ,
@@ -199,7 +215,7 @@ def mainCreateTable():
 
 
 def maincreatedata(RFIDcode, FirstName, LastName, finger1, finger2, Status):
-    database = r"D:\V2.0.0\Programme\qt\DB\ArtaDoor.db"
+    # database = dataBase_path
 
     # create a database connection
     conn = create_connection(database)
@@ -224,7 +240,7 @@ def maincreatedata(RFIDcode, FirstName, LastName, finger1, finger2, Status):
 
 
 def mainCreateLog(date, timeEnter, timeOut, employee_id):
-    database = r"D:\V2.0.0\Programme\qt\DB\ArtaDoor.db"
+    # database = dataBase_path
 
     # create a database connection
     conn = create_connection(database)
@@ -235,13 +251,14 @@ def mainCreateLog(date, timeEnter, timeOut, employee_id):
             create_log(conn, log_1)
             return 'successfull'
             print("successfull")
-        except:
+        except sqlite3.Error as error:
             print('some thing is wrong')
+            print(error)
 
 
 def mainCreatefingerprintID():
     try:
-        sqliteConnection = sqlite3.connect('D:\V2.0.0\Programme\qt\DB\ArtaDoor.db')
+        sqliteConnection = sqlite3.connect(dataBase_path)
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
 
@@ -265,7 +282,7 @@ def mainCreatefingerprintID():
 
 # *******main select data from table **************
 def mainSelectData():
-    database = r"D:\V2.0.0\Programme\qt\DB\ArtaDoor.db"
+    # database = dataBase_path
 
     # create a database connection
     conn = create_connection(database)
@@ -278,7 +295,7 @@ def mainSelectData():
 
 
 def searchIdCard(idCard):
-    database = r"D:\V2.0.0\Programme\qt\DB\ArtaDoor.db"
+    # database = r"D:\V2.0.0\Programme\qt\DB\ArtaDoor.db"
 
     # create a database connection
     conn = create_connection(database)
@@ -288,7 +305,7 @@ def searchIdCard(idCard):
 
 
 def searchIdFingerprint(idFingerprint):
-    database = r"D:\V2.0.0\Programme\qt\DB\ArtaDoor.db"
+    # database = r"D:\V2.0.0\Programme\qt\DB\ArtaDoor.db"
 
     # create a database connection
     conn = create_connection(database)
@@ -298,7 +315,7 @@ def searchIdFingerprint(idFingerprint):
 
 
 def main_select_all_employee():
-    database = r"D:\V2.0.0\Programme\qt\DB\ArtaDoor.db"
+    # database = r"D:\V2.0.0\Programme\qt\DB\ArtaDoor.db"
 
     # create a database connection
     conn = create_connection(database)
@@ -308,7 +325,7 @@ def main_select_all_employee():
 
 
 def mainDeleteTask(idCard):
-    database = r"D:\V2.0.0\Programme\qt\DB\ArtaDoor.db"
+    # database = r"D:\V2.0.0\Programme\qt\DB\ArtaDoor.db"
 
     # create a database connection
     conn = create_connection(database)
@@ -317,23 +334,44 @@ def mainDeleteTask(idCard):
         # delete_all_tasks(conn);
 
 
-def selectEmployeeAndTimeIN(userID):
-    sqliteConnection = sqlite3.connect('D:\V2.0.0\Programme\qt\DB\ArtaDoor.db')
+def selectEmployeeAndTimeIN(idCard1):
+    sqliteConnection = sqlite3.connect(dataBase_path)
     cursor = sqliteConnection.cursor()
+    # sqlite_select_query = """SELECT timeInput,timeOutput from employeeTable INNER JOIN logTable
+    # ON employeeTable.idCard=logTable.idCard where userID =? and (id=(SELECT MAX(id) FROM logTable))"""
+
     sqlite_select_query = """SELECT timeInput,timeOutput from employeeTable INNER JOIN logTable 
-    ON employeeTable.idCard=logTable.idCard where userID =? and (id=(SELECT MAX(id) FROM logTable))"""
-    cursor.execute(sqlite_select_query, (userID,))
+       ON employeeTable.idCard=logTable.idCard where  (id=(SELECT MAX(id) FROM logTable where idCard = ?))"""
+
+    cursor.execute(sqlite_select_query, (idCard1,))
     records = cursor.fetchall()
-    # print("Total rows are:  ", len(records))
+    print("Total rows are:  ", len(records))
+    return records
     # for row in records:
     #     print(row)
-    cursor.close()
+    # cursor.close()
 
+##for export ib excel
 
-def getAllEmployeeAndTime():
-    sqliteConnection = sqlite3.connect('D:\V2.0.0\Programme\qt\DB\ArtaDoor.db')
+def create_export(userID,month):
+
+    sqliteConnection = sqlite3.connect(dataBase_path)
     cursor = sqliteConnection.cursor()
-    sqlite_select_query = """SELECT userID,firsName from employeeTable"""
+    nMonth=month+"%"
+    sqlite_select_query = """SELECT firsName,lastName,date,timeInput,timeOutput from employeeTable INNER JOIN logTable 
+    ON employeeTable.idCard=logTable.idCard where userID =? and date like ? """
+    cursor.execute(sqlite_select_query, (userID,nMonth,))
+    records = cursor.fetchall()
+    print("Total rows are:  ", len(records))
+    for row in records:
+        print(row)
+
+    cursor.close()
+    return records
+def getAllEmployeeAndTime():
+    sqliteConnection = sqlite3.connect(dataBase_path)
+    cursor = sqliteConnection.cursor()
+    sqlite_select_query = """SELECT userID,firsName,idCard from employeeTable where status=='1'"""
     cursor.execute(sqlite_select_query)
     records = cursor.fetchall()
     return records
@@ -341,7 +379,7 @@ def getAllEmployeeAndTime():
 
 def update_fingerprint_id(number):
     try:
-        sqliteConnection = sqlite3.connect('D:\V2.0.0\Programme\qt\DB\ArtaDoor.db')
+        sqliteConnection = sqlite3.connect(dataBase_path)
         cursor = sqliteConnection.cursor()
         print("Connected to SQLite")
 
@@ -356,7 +394,7 @@ def update_fingerprint_id(number):
 
 def select_number_fingerprint_id():
     try:
-        sqliteConnection = sqlite3.connect('D:\V2.0.0\Programme\qt\DB\ArtaDoor.db')
+        sqliteConnection = sqlite3.connect(dataBase_path)
         cursor = sqliteConnection.cursor()
         print("Connected to SQLite")
 
@@ -375,7 +413,7 @@ def select_number_fingerprint_id():
 
 def update_employee_select(Fname,Lname,rfidCode,idEmployee):
         try:
-            sqliteConnection = sqlite3.connect('D:\V2.0.0\Programme\qt\DB\ArtaDoor.db')
+            sqliteConnection = sqlite3.connect(dataBase_path)
             cursor = sqliteConnection.cursor()
             print("Connected to SQLite")
             sql_update_query = """Update employeeTable set firsName = ?,lastName=?,RFIDcode=?  WHERE  userID = ?)"""
@@ -393,12 +431,72 @@ def update_employee_select(Fname,Lname,rfidCode,idEmployee):
         #         sqliteConnection.close()
         #         print("The SQLite connection is closed")
 
-# if __name__ == '__main__':
-    # maincreatedata("39402094","farnaz","farajzadeha","5","6","1")
-    # print(select_employee_by_fingerprint(3))
-    # getAllEmployeeAndTime()
-    # main_select_all_employee()
-    #mainCreateTable()
-    #mainCreatefingerprintID()
-    #print(select_number_fingerprint_id())
-    # update_fingerprint_id(4)
+
+#update number statis_finger
+
+def update_number_status_finger(userID,number):
+    try:
+        sqliteConnection = sqlite3.connect(dataBase_path)
+        cursor = sqliteConnection.cursor()
+        print("Connected to SQLite")
+        sql_update_query = """Update employeeTable set statis_finger=?  WHERE  userID = ?"""
+        edit = (number,userID)
+        cursor.execute(sql_update_query, edit)
+        # cursor.execute(sql_update_query)
+        sqliteConnection.commit()
+        print("Record Updated successfully ")
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to update sqlite table", error)
+    # finally:
+    #     if sqliteConnection:
+    #         sqliteConnection.close()
+    #         print("The SQLite connection is closed")
+
+def update_status_employee(status,userID):
+    try:
+        sqliteConnection = sqlite3.connect(dataBase_path)
+        cursor = sqliteConnection.cursor()
+        print("Connected to SQLite")
+        sql_update_query = """Update employeeTable set status=?  WHERE  userID = ?"""
+        cursor.execute(sql_update_query, (status,userID,))
+        # cursor.execute(sql_update_query)
+        sqliteConnection.commit()
+        print("Record Updated successfully ")
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to update sqlite table", error)
+
+def delete_employee(userID):
+
+    sqliteConnection = sqlite3.connect(dataBase_path)
+    cursor = sqliteConnection.cursor()
+    sqlite_select_query = """DELETE from employeeTable Where userID = ?"""
+    cursor.execute(sqlite_select_query, (userID,))
+    sqliteConnection.commit()
+    print("Record deleted successfully")
+    cursor.close()
+
+if __name__ == '__main__':
+    # update_status_employee("0",1)
+    # select_return_id("aaa")
+#     r=selectEmployeeAndTimeIN(2)
+#     print(r[0][0])
+
+#     # maincreatedata("39402094","farnaz","farajzadeha","5","6","1")
+#     # print(select_employee_by_fingerprint(3))
+#     # getAllEmployeeAndTime()
+#     # main_select_all_employee()
+    # mainCreateTable()
+    mainCreatefingerprintID()
+#     #print(select_number_fingerprint_id())
+#     # update_fingerprint_id(4)
+#     create_export(2)
+#     #selectEmployeeAndTimeIN("2")
+#         mainCreateLog("2021-10-18", "12:8", "12:8", "9409488")
+#         mainCreateLog("2021-10-12", "12:8", "12:8", "9409488")
+#         mainCreateLog("2021-10-13", "12:8", "12:8", "940948")
+#         mainCreateLog("2021-09-18", "12:8", "12:8", "9409488")
+#         create_export(2,"2021-10-10","2021-10-19")

@@ -928,6 +928,29 @@ QCheckBox::indicator:checked {
       </size>
      </property>
     </widget>
+    <widget class="QPushButton" name="delete_employee">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>660</y>
+       <width>61</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+
+background-color:
+qlineargradient(spread:pad, x1:0.487, y1:0, x2:0.516, y2:1, stop:0 rgba(42, 64, 74, 0.6), stop:1 rgba(42, 64, 74, 0.264));
+border-radius: 13px;
+color:rgb(255, 255, 255)
+
+</string>
+     </property>
+     <property name="text">
+      <string>delete</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QLabel" name="image_admin">
     <property name="geometry">
@@ -944,6 +967,40 @@ border-radius: 40px;</string>
     </property>
     <property name="text">
      <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_fix_icon_exit">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>430</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="../picture/resources.qrc">:/icon_exit.png</pixmap>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Exit">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>427</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-radius: 30px;
+color: rgb(255, 255, 255);
+font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Exite</string>
     </property>
    </widget>
   </widget>
