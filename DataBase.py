@@ -479,7 +479,7 @@ def delete_employee(userID):
     print("Record deleted successfully")
     cursor.close()
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
     # update_status_employee("0",1)
     # select_return_id("aaa")
 #     r=selectEmployeeAndTimeIN(2)
@@ -489,8 +489,8 @@ if __name__ == '__main__':
 #     # print(select_employee_by_fingerprint(3))
 #     # getAllEmployeeAndTime()
 #     # main_select_all_employee()
-    # mainCreateTable()
-    mainCreatefingerprintID()
+     #mainCreateTable()
+    # mainCreatefingerprintID()
 #     #print(select_number_fingerprint_id())
 #     # update_fingerprint_id(4)
 #     create_export(2)

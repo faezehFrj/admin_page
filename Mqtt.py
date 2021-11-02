@@ -285,6 +285,15 @@ def detrmineStatusButton(resultDB):
             publish(client, "", "open/door")
             publish(client, "state/openDoor/access", "state")
 
+            # show last oboro moror
+            for person in window.array_employee:
+                if person[0] == resultDB[0][0]:
+                    person[1].label_time_logOut.setText(current_time)
+
+
+
+
+
 
         # ****login****#
         elif buttonClicked == 2:
@@ -339,6 +348,12 @@ def detrmineStatusButton(resultDB):
     else:
         publish(client, "", "open/door")
         publish(client, "state/openDoor/access", "state")
+
+        #show last oboro moror
+        for person in window.array_employee:
+            if person[0] == resultDB[0][0]:
+                person[1].label_time_logOut.setText(current_time)
+
 
         #show last enter
 
