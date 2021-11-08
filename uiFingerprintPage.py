@@ -52,7 +52,7 @@ class Ui_MainWindowFingerprint(object):
         self.label_lavel = QLabel(self.frame_2)
         self.label_lavel.setObjectName(u"label_lavel")
         self.label_lavel.setGeometry(QRect(20, 10, 171, 16))
-        self.label_lavel.setStyleSheet(u"color: rgb(129, 127, 137);")
+        self.label_lavel.setStyleSheet(u"color: rgb(65, 187, 255);")
         self.framelavel1 = QFrame(self.frame_2)
         self.framelavel1.setObjectName(u"framelavel1")
         self.framelavel1.setGeometry(QRect(10, 10, 2, 19))

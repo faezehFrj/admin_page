@@ -14,7 +14,7 @@ from PySide2.QtGui import QPixmap
 import sys
 
 Connected = False  # global variable for the state of the connection
-broker_address = "172.16.16.74"  # Broker address
+broker_address = "192.168.31.147"  # Broker address
 port = 1883  # Broker port
 user = "yourUser"  # Connection username
 password = "yourPassword"  # Connection password
@@ -127,6 +127,9 @@ def subscribe_all_topic(topic_subscrib, mesege):
         print(resultDB)
         if not resultDB:
             publish(client, "state/openDoor/fail", "state")
+            t = setTimer(2)
+            t.start()
+
 
         else:
             detrmineStatusButton(resultDB)
@@ -145,7 +148,6 @@ def subscribe_all_topic(topic_subscrib, mesege):
     elif "enroll/getImage" == topic_subscrib:
         if "2" == mesege:
             print(".")
-            windowFingerPrint.ui_finger.label_lavel.setStyleSheet(u"color: rgb(65, 187, 255);")
         else:
             windowFingerPrint.ui_finger.alarm.setText(mesege)
 
@@ -165,7 +167,8 @@ def subscribe_all_topic(topic_subscrib, mesege):
     elif "enroll/RemoveFinger" == topic_subscrib:
         print(mesege)
         windowFingerPrint.ui_finger.alarm.setText(" ")
-        windowFingerPrint.ui_finger.label_level2.styleSheet(u"color: rgb(65, 187, 255);")
+        windowFingerPrint.ui_finger.label_level2.setStyleSheet(u"color: rgb(65, 187, 255);")
+
 
     elif "enroll/getImage2" == topic_subscrib:
         if "2" == mesege:
@@ -178,7 +181,7 @@ def subscribe_all_topic(topic_subscrib, mesege):
         if "Stored!" == mesege:
             print(mesege)
             windowFingerPrint.ui_finger.alarm.setText("succssfully")
-            windowFingerPrint.ui_finger.label_level4.styleSheet(u"color: rgb(65, 187, 255);")
+            windowFingerPrint.ui_finger.label_level4.setStyleSheet(u"color: rgb(65, 187, 255);")
 
         else:
             windowFingerPrint.ui_finger.alarm.setText(mesege)
@@ -186,13 +189,16 @@ def subscribe_all_topic(topic_subscrib, mesege):
     # *****find finger print ******#
 
     elif "search/find" == topic_subscrib:
-        t.cancel()
+         # t.cancel()
 
         if "denied" == mesege:
             publish(client, "state/openDoor/fail", "state")
+            t = setTimer(3)
+            t.start()
         else:
             resultDB = db.select_employee_by_fingerprint(mesege)
-            detrmineStatusButton(resultDB)
+            if len(resultDB)!=0:
+             detrmineStatusButton(resultDB)
 
     ####-----------------------touch button status--------------------------------#####
 
@@ -282,8 +288,12 @@ def detrmineStatusButton(resultDB):
     print(buttonClicked)
     if button_touch==1:
         if buttonClicked == 1:
-            publish(client, "", "open/door")
+            publish(client, "", "door/open")
             publish(client, "state/openDoor/access", "state")
+
+            t = setTimer(3)
+            t.start()
+
 
             # show last oboro moror
             for person in window.array_employee:
@@ -346,8 +356,10 @@ def detrmineStatusButton(resultDB):
                     person.label_time_logOut.setText(current_time)
 
     else:
-        publish(client, "", "open/door")
+        publish(client, "", "door/open")
         publish(client, "state/openDoor/access", "state")
+        t = setTimer(3)
+        t.start()
 
         #show last oboro moror
         for person in window.array_employee:
@@ -389,6 +401,7 @@ def resetFactory():
     set_time.cancel()
 
 
+
 # -----------------timer-----------------------#
 def setTimer(second):
     reset_system = threading.Timer(second, resetFactory)
@@ -396,8 +409,9 @@ def setTimer(second):
 
 def configmqtt():
     global client
-    client = mqttClient.Client("Python")  # create new instance
+    client = mqttClient.Client("Python1888")  # create new instance
     client.connect(broker_address, port=port)  # connect to broker
+
 
 
 
