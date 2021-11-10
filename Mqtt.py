@@ -4,12 +4,11 @@ import DataBase as db
 import time
 import threading
 import main as ui
-from PySide2.QtCore import  QCoreApplication
+from PySide2.QtCore import QCoreApplication
 import jdatetime
 from employee import Person as new_Person
 from PyQt5.QtCore import *
 from PySide2.QtGui import QPixmap
-
 
 import sys
 
@@ -22,23 +21,21 @@ myGlobalMessagePayload = ''  # HERE!
 state_rfid = 0  # baraye in ke bebinim mikhad fard jadid  tarif kone ya in ke mikhad haminjor biyad to
 id_rfid_employee = 0
 buttonClicked = 0
-button_touch=0
+button_touch = 0
 status_crete_employee = 0
-statusLamp = [0, 0, 0, 0, 0, 0, 0, 0,0]
-mqttClient.Client.connected_flag=False#create flag in class
+statusLamp = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+mqttClient.Client.connected_flag = False  # create flag in class
 app = ui.QApplication(ui.sys.argv)
 
 window = ui.MainWindow()
 windowadmin = ui.MainWindowAdmin()
 windowAlarmEmployee = ui.AlarmSaveEmployee()
-windowExport=ui.MainCreateExport()
-windowFingerPrint=ui.MainWindowFingerprint()
-windowPassword=ui.PasswordCheck()
-windowDelete=ui.DeleteEmployee()
+windowExport = ui.MainCreateExport()
+windowFingerPrint = ui.MainWindowFingerprint()
+windowPassword = ui.PasswordCheck()
+windowDelete = ui.DeleteEmployee()
 window.show_employee()
 window.showNowTime()
-
-
 
 
 def on_connect(self, userdata, flags, rc):
@@ -51,8 +48,7 @@ def on_connect(self, userdata, flags, rc):
         print(Connected)
         window.ui.label_wifi.setPixmap(QPixmap(u":/mqtt_connect.png"))
 
-
-        #subscrib
+        # subscrib
         client.subscribe("python/test")
         client.subscribe("publish/RFIDCode")
         client.subscribe("button/click")
@@ -63,6 +59,7 @@ def on_connect(self, userdata, flags, rc):
         client.subscribe("search/find")
         client.subscribe("temp")
         client.subscribe("humi")
+        client.subscribe("enroll/getImage2")
 
     else:
 
@@ -84,10 +81,12 @@ def on_message(client, userdata, msg):
     print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
     # return msg.payload.decode()
 
+
 def on_disconnect(client, userdata, rc):
     if rc != 0:
         print("Unexpected MQTT disconnection. Will auto-reconnect")
         window.ui.label_wifi.setPixmap(QPixmap(u":/wifi.png"))
+
 
 def publish(client, m, topic_publish):
     msg_count = 0
@@ -115,7 +114,7 @@ def get_payload():
 
 #####subscribe######
 def subscribe_all_topic(topic_subscrib, mesege):
-    global buttonClicked, set_time, t,button_touch
+    global buttonClicked, set_time, t, button_touch
     set_time = setTimer(5)
     set_time.cancel()
 
@@ -125,14 +124,17 @@ def subscribe_all_topic(topic_subscrib, mesege):
         setIDrfid(mesege)  # add rfid code to id_rfid_employee variable
         resultDB = db.searchIdCard(mesege)
         print(resultDB)
+        publish(client, "state/buzzer/automatic", "state/buzzer")
         if not resultDB:
             publish(client, "state/openDoor/fail", "state")
+            publish(client, "neopixel/red", "neopixel")
             t = setTimer(2)
             t.start()
 
 
         else:
             detrmineStatusButton(resultDB)
+            publish(client, "neopixel/green", "neopixel")
 
         if status_crete_employee == 1:
             windowadmin.ui_admin.label_RFID.setText(id_rfid_employee)
@@ -148,6 +150,7 @@ def subscribe_all_topic(topic_subscrib, mesege):
     elif "enroll/getImage" == topic_subscrib:
         if "2" == mesege:
             print(".")
+
         else:
             windowFingerPrint.ui_finger.alarm.setText(mesege)
 
@@ -173,7 +176,7 @@ def subscribe_all_topic(topic_subscrib, mesege):
     elif "enroll/getImage2" == topic_subscrib:
         if "2" == mesege:
             print(".")
-            windowFingerPrint.ui_finger.label_lavel.setStyleSheet(u"color: rgb(65, 187, 255);")
+            windowFingerPrint.ui_finger.label_level3.setStyleSheet(u"color: rgb(65, 187, 255);")
         else:
             windowFingerPrint.ui_finger.alarm.setText(mesege)
 
@@ -182,6 +185,8 @@ def subscribe_all_topic(topic_subscrib, mesege):
             print(mesege)
             windowFingerPrint.ui_finger.alarm.setText("succssfully")
             windowFingerPrint.ui_finger.label_level4.setStyleSheet(u"color: rgb(65, 187, 255);")
+            windowadmin.update_number_fingerprint_define()
+            windowadmin.update_list_employee()
 
         else:
             windowFingerPrint.ui_finger.alarm.setText(mesege)
@@ -189,22 +194,28 @@ def subscribe_all_topic(topic_subscrib, mesege):
     # *****find finger print ******#
 
     elif "search/find" == topic_subscrib:
-         # t.cancel()
-
+        # t.cancel()
+        publish(client, "state/buzzer/automatic", "state/buzzer")
         if "denied" == mesege:
             publish(client, "state/openDoor/fail", "state")
+            publish(client, "neopixel/red", "neopixel")
             t = setTimer(3)
             t.start()
         else:
             resultDB = db.select_employee_by_fingerprint(mesege)
-            if len(resultDB)!=0:
-             detrmineStatusButton(resultDB)
+            print(resultDB)
+            if len(resultDB) != 0:
+                detrmineStatusButton(resultDB)
+            else:
+                publish(client, "state/openDoor/fail", "state")
+                t = setTimer(3)
+                t.start()
 
     ####-----------------------touch button status--------------------------------#####
 
     if "button/click" == topic_subscrib:
         t = setTimer(10)
-        button_touch=1
+        button_touch = 1
 
         if buttonClicked == 1:
             t.cancel()
@@ -238,6 +249,7 @@ def subscribe_all_topic(topic_subscrib, mesege):
 
     elif "humi" == topic_subscrib:
         window.humidBarValue(float(mesege))
+
 
 # ********************************publish********************************************#
 
@@ -280,13 +292,13 @@ def setIDrfid(idForSetRfid):
 # ******method******
 
 def detrmineStatusButton(resultDB):
-    global buttonClicked
+    global buttonClicked, t
 
     now = datetime.now()
     today = jdatetime.datetime.now().strftime("%Y-%m-%d")
     current_time = now.strftime("%H:%M")
     print(buttonClicked)
-    if button_touch==1:
+    if button_touch == 1:
         if buttonClicked == 1:
             publish(client, "", "door/open")
             publish(client, "state/openDoor/access", "state")
@@ -294,14 +306,12 @@ def detrmineStatusButton(resultDB):
             t = setTimer(3)
             t.start()
 
-
             # show last oboro moror
             for person in window.array_employee:
+                print("---------------------------------")
+                print(person)
                 if person[0] == resultDB[0][0]:
                     person[1].label_time_logOut.setText(current_time)
-
-
-
 
 
 
@@ -361,13 +371,12 @@ def detrmineStatusButton(resultDB):
         t = setTimer(3)
         t.start()
 
-        #show last oboro moror
+        # show last oboro moror
         for person in window.array_employee:
             if person[0] == resultDB[0][0]:
                 person[1].label_time_logOut.setText(current_time)
 
-
-        #show last enter
+        # show last enter
 
         # set_time.start()
         # ####save logout in data base####
@@ -390,16 +399,17 @@ def detrmineStatusButton(resultDB):
         #                                                  "font: 25 10pt \"Segoe UI Light\";")
         #         person.label_time_logOut.setText(current_time)
 
+
 # ------------------normal status----------------#
 def resetFactory():
-    global buttonClicked,button_touch
+    global buttonClicked, button_touch
     publish(client, "state/normal", "state")
     publish(client, "state/fingerprint/stop", "state/fingerprint")
+    publish(client, "neopixel/blue", "neopixel")
     buttonClicked = 0
     button_touch = 0
     t.cancel()
     set_time.cancel()
-
 
 
 # -----------------timer-----------------------#
@@ -407,21 +417,16 @@ def setTimer(second):
     reset_system = threading.Timer(second, resetFactory)
     return reset_system
 
+
 def configmqtt():
     global client
     client = mqttClient.Client("Python1888")  # create new instance
     client.connect(broker_address, port=port)  # connect to broker
 
-
-
-
-
     client.on_connect = on_connect
     client.on_message = on_message
     client.on_disconnect = on_disconnect
     client.loop_start()  # start the loop
-
-
 
     # time.sleep(1)
     # while not client.connected_flag:  # wait in loop
@@ -434,13 +439,11 @@ def configmqtt():
     #     window.ui.label_wifi.setPixmap(QPixmap(u":/mqtt_connect.png"))
 
 
-
-
-
-
 def get_clientvalue():
     return client
-#----action button----------
+
+
+# ----action button----------
 def function_button():
     window.ui.change_icon_lamp()
     window.ui.button_lamp1.clicked.connect(the_button_was_clicked1)
@@ -465,69 +468,77 @@ def function_button():
     windowExport.ui_export.pushButton_ok.clicked.connect(create_export)
     windowExport.ui_export.pushButton_close.clicked.connect(close_page_export)
     windowFingerPrint.ui_finger.pushButton_click.clicked.connect(close_page_fingerprint)
-    #-----password
+    # -----password
 
     windowPassword.ui_pass.pushButton_cancel_pass.clicked.connect(back_dashboard)
     windowPassword.ui_pass.pushButton_check_pass.clicked.connect(varify_password)
 
-    #-----close project
+    # -----close project
     windowadmin.ui_admin.pushButton_Exit.clicked.connect(close_project)
 
-    #----alarm delete employee-----
+    # ----alarm delete employee-----
     windowadmin.ui_admin.delete_employee.clicked.connect(show_sure_delete)
     windowDelete.ui_delete.pushButton_okey_delete.clicked.connect(delete_employee)
     windowDelete.ui_delete.pushButton_cancel_delete.clicked.connect(cancel_delete_employee)
 
-    #-----check box------------------
+    # -----check box------------------
     windowadmin.ui_admin.checkBox_active.stateChanged.connect(active_or_diactive_emloyee)
 
 
-
-
-
-#-------check box-----------
+# -------check box-----------
 def active_or_diactive_emloyee():
     windowadmin.change()
-    clearLayout(window.ui.frame_employees.layout())
+    # clearLayout(window.ui.frame_employees.layout())
+    clearLayout(window.ui.verticalLayout.layout())
+    window.array_employee=[]
     window.show_employee()
 
-#------delete employee--------
+
+# ------delete employee--------
 def show_sure_delete():
     windowadmin.ui_admin.blur(2)
     windowDelete.show()
 
-def delete_employee():
 
+def delete_employee():
     windowadmin.ui_admin.blur(0)
     windowDelete.hide()
     windowadmin.delete_employee_select()
-    clearLayout(window.ui.frame_employees.layout())
+    clearLayout(window.ui.verticalLayout.layout())
+    publish(client, windowadmin.id_fingerprint_for_delete1, "fingerprint/delete")
+    time.sleep(1)
+    publish(client, windowadmin.id_fingerprint_for_delete2, "fingerprint/delete")
+    window.array_employee = []
     window.show_employee()
 
+
 def clearLayout(layout):
-  while layout.count():
-    child = layout.takeAt(0)
-    if child.widget():
-      child.widget().deleteLater()
+    while layout.count():
+        child = layout.takeAt(0)
+        if child.widget():
+            child.widget().deleteLater()
 
 
 def cancel_delete_employee():
     windowadmin.ui_admin.blur(0)
     windowDelete.hide()
-#---------close_project methode----------
+
+
+# ---------close_project methode----------
 def close_project():
     windowadmin.hide()
     ui.sys.exit(app.exec_())
 
 
-#-------------varify password--------
+# -------------varify password--------
 
 def go_to_varufy_password():
     windowPassword.show()
     window.ui.blur(2)
 
+
 def varify_password():
-    my_pass="1212"
+    my_pass = "4804"
     if windowPassword.ui_pass.lineEdit_password.text() == my_pass:
         go_to_admin_page()
         windowPassword.ui_pass.label_alarm_pass.setText("")
@@ -538,9 +549,7 @@ def varify_password():
         windowPassword.ui_pass.lineEdit_password.setText("")
 
 
-
-
-#-------------------export------------------------
+# -------------------export------------------------
 def show_export_page():
     windowExport.ui_export.lable_result_export.setText(" ")
     windowExport.show()
@@ -553,37 +562,45 @@ def close_page_export():
 
 
 def create_export():
-    result=windowExport.create_export(windowadmin.id_employee_select)
-    if result==True:
+    result = windowExport.create_export(windowadmin.id_employee_select)
+    if result == True:
         windowExport.ui_export.lable_result_export.setText("export successful")
     else:
         windowExport.ui_export.lable_result_export.setText("There isn't any data")
 
-#---------------export---------------------------
+
+# ---------------export---------------------------
 
 
-
-#---------------fingerprint----------------------
+# ---------------fingerprint----------------------
 def show_finger_print_page():
+    print(type(windowadmin.number_id_fingerprint_save))
 
-        if windowadmin.number_id_fingerprint_save != 2:
-            windowFingerPrint.show()
-            createFingerprint(windowadmin.enroll_id_fingerprint)
-            # creating a blur effect
-            windowadmin.ui_admin.blur(3)
-
-
-        else:
-            windowFingerPrint.ui_admin.label_message_number_fingerprint.setText("fingerprint has saved")
+    if windowadmin.number_id_fingerprint_save != "2":
+        windowFingerPrint.show()
+        createFingerprint(windowadmin.enroll_id_fingerprint)
+        # creating a blur effect
+        windowadmin.ui_admin.blur(3)
 
 
+    else:
+        windowadmin.ui_admin.label_message_number_fingerprint.setText("fingerprint has saved")
 
-def close_page_fingerprint() :
+
+def close_page_fingerprint():
     windowFingerPrint.hide()
     windowadmin.ui_admin.blur(0)
     windowFingerPrint.ui_finger.alarm.setText(" ")
-#---------------fingerprint----------------------
 
+    # windowFingerPrint.ui_finger.label_lavel.setStyleSheet(u"color: rgb(129, 127, 137);")
+    windowFingerPrint.ui_finger.label_level4.setStyleSheet(u"color: rgb(129, 127, 137);")
+    windowFingerPrint.ui_finger.label_level2.setStyleSheet(u"color: rgb(129, 127, 137);")
+    windowFingerPrint.ui_finger.label_level3.setStyleSheet(u"color: rgb(129, 127, 137);")
+
+    stopFingerprint()
+
+
+# ---------------fingerprint----------------------
 
 
 def close_save_window():
@@ -595,9 +612,6 @@ def back_dashboard():
     window.show()
     windowPassword.hide()
     window.ui.blur(0)
-
-
-
 
 
 def the_button_was_clicked1():
@@ -695,6 +709,7 @@ def the_button_was_clicked8():
         window.ui.button_lamp8.setIcon(window.ui.icon_light_off)
         statusLamp[7] = 0
 
+
 # -----admin page display-------#
 
 def go_to_admin_page():
@@ -708,10 +723,9 @@ def create_new_employee():
     number = windowadmin.get_number_employee()
 
     global status_crete_employee
-    if number <8:
+    if number < 8:
         windowadmin.ui_admin.frame_features_one_employee.show()
         windowadmin.ui_admin.fram_after_add.hide()
-
 
         windowadmin.ui_admin.lineEdit_fname.setText(QCoreApplication.translate("MainWindow", "", None))
         windowadmin.ui_admin.lineEdit_Lname.setText(QCoreApplication.translate("MainWindow", "", None))
@@ -758,18 +772,14 @@ def save_or_edit_employee():
                 windowadmin.ui_admin.label_id_fingerprint.setText(str(number2 + 1))
                 windowadmin.ui_admin.label_t_name.setText("Fill")
 
-
-
-
-                #10/26
-                id_person=db.select_return_id(id_rfid_employee)
-                p=new_Person(firstName,window.ui.frame_employees)
+                # 10/26
+                id_person = db.select_return_id(id_rfid_employee)
+                p = new_Person(firstName, window.ui.frame_employees)
                 temp_array = []
                 window.ui.verticalLayout.addWidget(p.config())
                 temp_array.append(id_person)
                 temp_array.append(p)
                 window.array_employee.append(temp_array)
-
 
                 # update list
 
@@ -777,7 +787,7 @@ def save_or_edit_employee():
                 windowadmin.update_list_employee()
                 status_crete_employee == 0
 
-            elif result== False:
+            elif result == False:
                 windowAlarmEmployee.show()
                 windowAlarmEmployee.ui_alarm_save.labelAlaemEployeeSave.setText("UNIQUE idCard failed")
 
@@ -803,17 +813,16 @@ def save_or_edit_employee():
 #     icon_light_off.addFile(u"D:/V2.0.0/Programme/qt/UI design/picture/btLampOff.png", QSize(), QIcon.Normal, QIcon.Off)
 
 
-
 def the_button_door_clicked():
     # icon = QIcon()
     # icon.addFile(u"D:/V2.0.0/Programme/qt/UI design/picture/Lockbtn.png", QSize(), QIcon.Normal, QIcon.Off)
     # icon.addFile(u"D:/V2.0.0/Programme/qt/UI design/picture/btnLamp.png", QSize(), QIcon.Normal, QIcon.On)
     # self.button_door.setIcon(icon)
     publish(client, "", "door/open")
+    publish(client, "neopixel/open/door", "neopixel")
 
 
 def access_all_button():
-
     if statusLamp[8] == 0:
         # icon4.addFile(u"D:/V2.0.0/Programme/qt/UI design/picture/btPowerOn.png", QSize(), QIcon.Normal, QIcon.Off)
         window.ui.change_icon_power(0)
@@ -825,8 +834,6 @@ def access_all_button():
         window.ui.change_icon_power(1)
         window.ui.label_power.setText(QCoreApplication.translate("MainWindow", u"Turn off", None))
         statusLamp[8] = 0
-
-
 
 
 function_button()

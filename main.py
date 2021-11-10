@@ -34,6 +34,8 @@ class MainWindowAdmin(QMainWindow):
         self.ui_admin.setupUi(self)
         self.number_id_fingerprint_save = 0
         self.enroll_id_fingerprint = 0
+        self.id_fingerprint_for_delete1=0
+        self.id_fingerprint_for_delete2=0
 
         # show hours and data
         self.ui_admin.fram_after_add.hide()
@@ -109,6 +111,7 @@ class MainWindowAdmin(QMainWindow):
 
         self.update_list_employee()
 
+
     def show_features_employee(self, id_employee_choose):
 
         #---------set id fram -----
@@ -121,6 +124,8 @@ class MainWindowAdmin(QMainWindow):
         name = self.epmloyees[id_employee_choose][2]
         family = self.epmloyees[id_employee_choose][3]
         rfid = self.epmloyees[id_employee_choose][1]
+        self.id_fingerprint_for_delete1 = self.epmloyees[id_employee_choose][4]
+        self.id_fingerprint_for_delete2 = self.epmloyees[id_employee_choose][5]
         self.ui_admin.lineEdit_fname.setText(QCoreApplication.translate("MainWindow", name, None))
         self.ui_admin.lineEdit_Lname.setText(QCoreApplication.translate("MainWindow", family, None))
         self.ui_admin.label_RFID.setText(QCoreApplication.translate("MainWindow", rfid, None))
@@ -142,6 +147,7 @@ class MainWindowAdmin(QMainWindow):
             self.enroll_id_fingerprint = self.epmloyees[id_employee_choose][5]
         else:
             self.ui_admin.label_message_number_fingerprint.setText("fingerprint has saved")
+            self.ui_admin.label_id_fingerprint.setText(self.epmloyees[id_employee_choose][5])
         temp = self.epmloyees[id_employee_choose][0]
         self.set_id(temp)
         self.set_rfid_select_employee(self.epmloyees[id_employee_choose][1])
@@ -198,7 +204,7 @@ class MainWindowAdmin(QMainWindow):
     # ---update number fingerprint save after add fingerprint in device
 
     def update_number_fingerprint_define(self):
-        db.update_number_status_finger(self.id_employee_select, self.number_id_fingerprint_save + 1)
+        db.update_number_status_finger(self.id_employee_select, str(int(self.number_id_fingerprint_save) + 1))
 
 
 # -------------fingerprint------------------
@@ -331,8 +337,6 @@ class MainWindow(QMainWindow):
     def show_employee(self):
         self.records = db.getAllEmployeeAndTime()
 
-
-
         for row in self.records:
             p = Person(row[1], self.ui.frame_employees)
             temp_array = []
@@ -417,8 +421,8 @@ class MainWindow(QMainWindow):
 
         # get new value
         temp=progress - 0.001
-        stop_1 = str(temp)
-        stop_2 = str(progress)
+        stop_1 = str(int(temp))
+        stop_2 = str(int(progress))
 
         # replace
         styleSheetNew = styleSheet.replace("{STOP_1}", stop_1).replace("{STOP_2}", stop_2)

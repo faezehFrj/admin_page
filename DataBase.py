@@ -117,7 +117,7 @@ def select_employee_by_fingerprint(idFingerprint):
         cursor = sqliteConnection.cursor()
         print("Connected to SQLite")
 
-        sql_select_query = """SELECT * FROM employeeTable WHERE  finger1= ? OR finger2= ?"""
+        sql_select_query = """SELECT * FROM employeeTable WHERE  (finger1= ? OR finger2= ?) and status='1' """
         cursor.execute(sql_select_query, (idFingerprint, idFingerprint,))
         records = cursor.fetchall()
         print("Printing ID ", idFingerprint)
@@ -371,7 +371,7 @@ def create_export(userID,month):
 def getAllEmployeeAndTime():
     sqliteConnection = sqlite3.connect(dataBase_path)
     cursor = sqliteConnection.cursor()
-    sqlite_select_query = """SELECT userID,firsName,idCard from employeeTable where status=='1'"""
+    sqlite_select_query = """SELECT userID,firsName,idCard from employeeTable where status ='1'"""
     cursor.execute(sqlite_select_query)
     records = cursor.fetchall()
     return records
