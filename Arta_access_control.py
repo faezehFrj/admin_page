@@ -24,8 +24,10 @@ buttonClicked = 0
 button_touch = 0
 status_crete_employee = 0
 statusLamp = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+stop_button_finger = False
 mqttClient.Client.connected_flag = False  # create flag in class
 app = ui.QApplication(ui.sys.argv)
+
 
 window = ui.MainWindow()
 windowadmin = ui.MainWindowAdmin()
@@ -114,9 +116,11 @@ def get_payload():
 
 #####subscribe######
 def subscribe_all_topic(topic_subscrib, mesege):
-    global buttonClicked, set_time, t, button_touch
+    global buttonClicked, set_time, button_touch,stop_touch,stop_button_finger
+    global t
     set_time = setTimer(5)
     set_time.cancel()
+
 
     ####---------------------------rfid----------------------------------####
     if "publish/RFIDCode" == topic_subscrib:
@@ -195,6 +199,7 @@ def subscribe_all_topic(topic_subscrib, mesege):
 
     elif "search/find" == topic_subscrib:
         # t.cancel()
+
         publish(client, "state/buzzer/automatic", "state/buzzer")
         if "denied" == mesege:
             publish(client, "state/openDoor/fail", "state")
@@ -206,33 +211,54 @@ def subscribe_all_topic(topic_subscrib, mesege):
             print(resultDB)
             if len(resultDB) != 0:
                 detrmineStatusButton(resultDB)
+                publish(client, "neopixel/green", "neopixel")
             else:
                 publish(client, "state/openDoor/fail", "state")
+                publish(client, "neopixel/red", "neopixel")
                 t = setTimer(3)
                 t.start()
 
     ####-----------------------touch button status--------------------------------#####
 
     if "button/click" == topic_subscrib:
-        t = setTimer(10)
-        button_touch = 1
+        if stop_button_finger == False:
 
-        if buttonClicked == 1:
-            t.cancel()
-            publish(client, "state/login", "state")
-            buttonClicked = 2
-            t.start()
-        elif buttonClicked == 2:
-            t.cancel()
-            publish(client, "state/logout", "state")
-            print("logout")
-            buttonClicked = 0
-            t.start()
-        elif buttonClicked == 0:
-            publish(client, "state/openDoor/show", "state")
-            publish(client, "state/fingerprint/run", "state/fingerprint")
-            buttonClicked = 1
-            t.start()
+            button_touch = 1
+
+            if buttonClicked == 1:
+                stop_touch.cancel()
+                stop_touch = setTimer_STOP_touch(1.5)
+                stop_touch.start()
+
+                publish(client, "state/login", "state")
+                buttonClicked = 2
+
+            elif buttonClicked == 2:
+                stop_touch.cancel()
+                stop_touch = setTimer_STOP_touch(1.5)
+                stop_touch.start()
+
+                publish(client, "state/logout", "state")
+                print("logout")
+                buttonClicked = 3
+
+            elif buttonClicked == 0:
+                stop_touch = setTimer_STOP_touch(1.5)
+                stop_touch.start()
+
+                t = setTimer(6)
+                publish(client, "state/openDoor/show", "state")
+                # publish(client, "state/fingerprint/run", "state/fingerprint")
+                buttonClicked = 1
+                t.start()
+
+            elif buttonClicked == 3:
+                resetFactory()
+                buttonClicked = 0
+
+
+
+
 
     ####------------------------buzzer---------------------------------------------####
 
@@ -290,9 +316,18 @@ def setIDrfid(idForSetRfid):
 
 
 # ******method******
+def delay_fingerprint():
+    global stop_button_finger
+    publish(client, "state/fingerprint/run", "state/fingerprint")
+    stop_button_finger = True
+
+def setTimer_STOP_touch(second):
+    reset_system = threading.Timer(second, delay_fingerprint)
+    return reset_system
+
 
 def detrmineStatusButton(resultDB):
-    global buttonClicked, t
+    global buttonClicked,t
 
     now = datetime.now()
     today = jdatetime.datetime.now().strftime("%Y-%m-%d")
@@ -343,8 +378,8 @@ def detrmineStatusButton(resultDB):
 
 
         # ****logout****#
-        elif buttonClicked == 0:
-            set_time.start()
+        elif buttonClicked == 3:
+
             ####save logout in data base####
             db.updateLogTable(current_time, resultDB[0][1])
             ####show oled #####
@@ -364,6 +399,10 @@ def detrmineStatusButton(resultDB):
                     person.label_name_employee.setStyleSheet(u"color: rgb(121, 121, 121);\n"
                                                              "font: 25 10pt \"Segoe UI Light\";")
                     person.label_time_logOut.setText(current_time)
+
+                    t.cancel()
+                    t = setTimer(3)
+                    t.start()
 
     else:
         publish(client, "", "door/open")
@@ -402,13 +441,16 @@ def detrmineStatusButton(resultDB):
 
 # ------------------normal status----------------#
 def resetFactory():
-    global buttonClicked, button_touch
+    global buttonClicked, button_touch,t,stop_touch,stop_button_finger
+    t.cancel()
+    stop_touch.cancel()
+    print("reset factory")
     publish(client, "state/normal", "state")
     publish(client, "state/fingerprint/stop", "state/fingerprint")
     publish(client, "neopixel/blue", "neopixel")
     buttonClicked = 0
     button_touch = 0
-    t.cancel()
+    stop_button_finger = False
     set_time.cancel()
 
 
@@ -420,7 +462,7 @@ def setTimer(second):
 
 def configmqtt():
     global client
-    client = mqttClient.Client("Python1888")  # create new instance
+    client = mqttClient.Client("Python")  # create new instance
     client.connect(broker_address, port=port)  # connect to broker
 
     client.on_connect = on_connect
